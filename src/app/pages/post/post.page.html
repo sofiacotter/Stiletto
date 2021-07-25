@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Stiletto</ion-title>
+    <ion-buttons left>
+      <ion-button fill="clear" (click)="BackPage()">
+          <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+
+    <!-- Header: Avatar + Username -->
+    <ion-row id='postHeader'>
+      <ion-col size="2">
+        <ion-avatar>
+          <img src="{{avatar}}">
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="7">
+        <p style="color: black;">{{username}}</p>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button style="float: right;" fill="clear" (click)="OpenPostOptions($event)">
+          <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  
+  
+  
+    <!-- Imagem -->
+    <ion-row>
+      <img src="{{image}}">
+    </ion-row>
+    
+    
+    
+    
+    <!-- Botões de ícones: Comentários + Likes + Saved -->
+    <div class='postIcons'>
+      <ion-row class='postIconsInside'>
+        <ion-col size="3">
+  
+        </ion-col>
+        <ion-col size="3" class="icons">
+          <ion-button fill="clear">
+            <ion-icon ion-align-self-center name="pencil-outline"></ion-icon>
+            <ion-label ion-align-self-center>{{ncommented}}</ion-label>
+          </ion-button>
+        </ion-col>
+        <ion-col size="3" class="icons">
+            <ion-button fill="clear">
+              <ion-icon ion-align-self-center name="heart-outline"></ion-icon>
+              <ion-label ion-align-self-center>{{nliked}}</ion-label>
+            </ion-button>
+        </ion-col>
+        <ion-col size="3" class="icons">
+            <ion-button fill="clear">
+              <ion-icon ion-align-self-center name="bookmark-outline"></ion-icon>
+              <ion-label ion-align-self-center>{{nsaved}}</ion-label>
+            </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+   
+  
+  
+  
+  
+  
+    <!-- Descrição -->
+    <ion-row class="descriptionbox">
+      <p>{{description}}</p>
+    </ion-row>
+  
+  
+     <!-- Hashtags -->
+     <ion-row class="hashtagsbox">
+      <p>{{hashtags}}</p>
+    </ion-row>
+    
+  </ion-card>
+  
+</ion-content>

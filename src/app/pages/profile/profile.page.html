@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{username}}</ion-title>
+      <ion-button fill="clear" (click)="OpenSettingsPopup($event)">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div id="top">
+
+
+    <div id="profilephotodiv">
+      <img class="profile-photo" src="{{profilepic}}">
+    </div>
+
+    <div style="float:right; width: 70%; height: fit-content;">
+      <ion-grid class="headerinfo">
+        <ion-row>
+          <ion-col>
+            <p class="text">
+              <strong>{{nposts}}</strong><br>
+              <em>posts</em>
+            </p>
+          </ion-col>
+          <ion-col>
+            <p class="text">
+              <strong>{{nfollowers}}</strong><br>
+              <em>followers</em>
+            </p>
+          </ion-col>
+          <ion-col>
+            <p class="text">
+              <strong>{{nfollowing}}</strong><br>
+              <em>following</em>
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+
+
+  </div>
+
+
+  <div id="bottom">
+    <ion-grid id="gallery">
+      <ion-row>
+        <ion-col size="4" *ngFor="let image of images">
+            <ion-img [src]="image" (click)="OpenPost()"></ion-img>
+          
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

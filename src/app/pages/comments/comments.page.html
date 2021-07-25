@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Comments</ion-title>
+    <ion-buttons left>
+      <ion-button fill="clear" (click)="BackPage()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+      <ion-grid class="comment">
+        <ion-row>
+          <ion-col size="2">
+            <ion-avatar>
+              <img src="{{avatar}}">
+            </ion-avatar>
+          </ion-col>
+
+          <ion-col size="3">
+            <p style="font-weight: bold;">{{username}}</p>
+          </ion-col>
+
+          <ion-col size="7">
+            <p>{{comment}}</p>
+          </ion-col>
+
+        </ion-row>
+        <ion-row>
+          <ion-col size="5">
+          </ion-col>
+          <ion-col size="7">
+            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+
+
+
+
+
+      <ion-grid class="comment">
+        <ion-row>
+          <ion-col size="2">
+            <ion-avatar>
+              <img src="{{avatar}}">
+            </ion-avatar>
+          </ion-col>
+
+          <ion-col size="3">
+            <p style="font-weight: bold;">{{username}}</p>
+          </ion-col>
+
+          <ion-col size="7">
+            <p>{{comment}}</p>
+          </ion-col>
+
+        </ion-row>
+        <ion-row>
+          <ion-col size="5">
+          </ion-col>
+          <ion-col size="7">
+            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+
+</ion-content>

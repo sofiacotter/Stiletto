@@ -1,0 +1,34 @@
+#top{
+    height: 10%;
+}
+
+
+#bottom{
+    height:90%
+}
+
+
+#gallery{
+    --ion-grid-column-padding: 1px;
+}
+
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+  
+  
+  /* Centered text */
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    /*background-color: #e7d791;*/
+    background-image: linear-gradient(to right, #c5854e , #fdfda8);
+    color: black;
+    font-family: 'Nunito Sans';
+  }

@@ -1,0 +1,45 @@
+p{
+    font-family: 'Nunito Sans'; 
+    font-size: 16px;
+}
+
+.icons{
+    padding: 0%;
+}
+
+.descriptionbox{
+    background-color: white;
+    padding: 3%;
+    color: black;
+}
+
+.hashtagsbox{
+    background-color: white;
+    padding: 3%;
+    color:mediumblue;
+}
+
+#postHeader{
+    /* https://www.seekpng.com/png/full/376-3761431_search-header-design-png-hd.png*/
+    background: linear-gradient(rgb(207 196 196 / 46%), 
+    rgb(239 239 239 / 50%)), 
+    url(https://img.freepik.com/vetores-gratis/fundo-de-pintura-aquarela-rosa-vibrante_53876-58931.jpg?size=626&ext=jpg&ga=GA1.2.1448789384.1622332800);
+    background-size: cover;
+    background-repeat: no-repeat;
+  
+}
+
+
+.postIcons{
+    /* https://www.seekpng.com/png/full/376-3761431_search-header-design-png-hd.png*/
+    background: linear-gradient(rgb(207 196 196 / 46%), 
+    rgb(239 239 239 / 50%)), 
+    url(https://img.freepik.com/vetores-gratis/fundo-de-pintura-aquarela-rosa-vibrante_53876-58931.jpg?size=626&ext=jpg&ga=GA1.2.1448789384.1622332800);
+    background-size: cover;
+    background-repeat: no-repeat;
+    transform: scaleX(-1);
+}
+
+.postIconsInside{
+    transform: scaleX(-1);
+}

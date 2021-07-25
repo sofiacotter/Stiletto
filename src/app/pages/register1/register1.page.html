@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Complete Registration</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="form-content">
+  <form class="form" [formGroup]="validations_form" (ngSubmit)="tryRegisterUsername(validations_form.value)">
+
+    <ion-item>
+      <ion-label position="stacked" color="primary">Email</ion-label>
+      <ion-input type="text" readonly>{{message.email}}</ion-input>
+    </ion-item>
+   
+
+    <ion-item>
+      <ion-label position="floating" color="primary">Username</ion-label>
+        <ion-input type="text" formControlName="username"></ion-input>
+    </ion-item>
+
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.username">
+        <div class="error-message" *ngIf="validations_form.get('username').hasError(validation.type) && 
+        (validations_form.get('username').dirty || validations_form.get('username').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-button  class="submit-btn" expand="block" type="submit" [disabled]="!validations_form.valid">Continue</ion-button>
+    <label class="error-message">{{errorMessage}}</label>
+    
+    
+  </form>
+    
+ 
+</ion-content>

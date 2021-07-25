@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{category}}</ion-title>
+    <ion-buttons left>
+      <ion-button fill="clear" (click)="BackToSearchPage()" class="my-style-for-modal">
+          <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid id="gallery">
+    <ion-row>
+      <ion-col size="4" *ngFor="let image of images">
+        <ion-img [src]="image" (click)="OpenPost()"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
