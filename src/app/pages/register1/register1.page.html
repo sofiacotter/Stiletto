@@ -1,10 +1,11 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Complete Registration</ion-title>
+  <ion-toolbar>
+    <ion-title>Stiletto</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding class="form-content">
+  <p class="text"> Complete your registration! </p>
   <form class="form" [formGroup]="validations_form" (ngSubmit)="tryRegisterUsername(validations_form.value)">
 
     <ion-item>

@@ -15,14 +15,15 @@ export class Register1Page implements OnInit, OnDestroy {
   
   validations_form: FormGroup
   
-  message:userDetails
+  message: userDetails
   subscription: Subscription
   errorMessage: string = ''
 
 
   //variaveis para validar username
-  usernameList:any[];
-  isvalid:boolean;
+  usernameList: any[];
+  isvalid: boolean;
+  profiledefault: string;
 
   validation_messages = {
     'username': [
@@ -37,7 +38,8 @@ export class Register1Page implements OnInit, OnDestroy {
     private fire: FireService,
     private formBuilder: FormBuilder,
     private router: Router
-    ) { }
+    ) { 
+    }
 
 
   ngOnInit() {
@@ -48,12 +50,13 @@ export class Register1Page implements OnInit, OnDestroy {
       this.usernameList = data.map(e => {
         return  e.payload.doc.data()['username']
       })
-    })
+    });
   
 
     this.validations_form = this.formBuilder.group({
       username: new FormControl('', Validators.compose([
         Validators.minLength(3),
+        Validators.maxLength(30),
         Validators.required
       ])),
     });
@@ -70,15 +73,18 @@ export class Register1Page implements OnInit, OnDestroy {
 
   
   tryRegisterUsername(value){
-    console.log("tryRegisterUsername", value);
+    console.log("tryRegisterUsername() ---> ", value);
 
     let t: userDetails = {
+      uid: '',
       email: this.message.email,
-      username: value.username
+      username: value.username,
+      profilephoto: "../assets/images/profile.png"
     }
 
     // Verificar se existe algum username na base de dados com este valor inserido
-    this.isvalid = ! this.usernameList.includes(this.validations_form.controls['username'].value)
+
+    this.isvalid = ! this.usernameList.includes(this.validations_form.controls['username'].value);
     
     
   if(this.isvalid){

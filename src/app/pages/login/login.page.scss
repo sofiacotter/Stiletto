@@ -1,13 +1,40 @@
 .error-message {
     color: var(--ion-color-danger);
+    font-family: 'Nunito Sans';
+    font-size: 18px;
    }
    .go-to-register {
     text-align: center;
     margin-top: 20px;
+    color: rgb(161, 24, 0);
    }
    .submit-btn {
+    font-family: 'Nunito Sans';
+    font-size: 18px;
     margin-top: 40px;
    }
    a:hover { 
     cursor: pointer;
    } 
+
+
+
+
+
+
+   ion-label{
+    font-family: 'Nunito Sans';
+}
+
+.textbottom{
+    text-align: center;
+    font-family: 'Nunito Sans';
+    margin-top: 30px;
+    font-size: 18px;
+}
+.textbottom1{
+    font-family: 'Nunito Sans';
+    color: rgb(161, 24, 0);
+    margin-top: 10px;
+    font-size: 18px;
+}

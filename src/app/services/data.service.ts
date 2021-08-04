@@ -8,8 +8,10 @@ import { userDetails } from '../details';
 export class DataService {
 
   private user: userDetails = {
+    uid: '',
     email: '', 
-    username: ''
+    username: '',
+    profilephoto: ''
   };
 
   private messageSource = new BehaviorSubject(this.user);

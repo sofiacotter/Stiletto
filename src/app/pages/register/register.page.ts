@@ -66,8 +66,10 @@ export class RegisterPage implements OnInit {
 
 
         let user: userDetails = {
+          uid: '',
           email: value.email, 
-          username: ''
+          username: '',
+          profilephoto: ''
         };
 
         this.dataService.changeMessage(user)

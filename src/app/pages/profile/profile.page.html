@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{username}}</ion-title>
+    <ion-title>{{userInfo.username}}</ion-title>
       <ion-button fill="clear" (click)="OpenSettingsPopup($event)">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>
@@ -10,11 +10,11 @@
 
 <ion-content>
 
-  <div id="top">
+  <div id="top" *ngIf="isLoaded">
 
 
     <div id="profilephotodiv">
-      <img class="profile-photo" src="{{profilepic}}">
+      <img class="profile-photo" src="{{userInfo.profilephoto}}">
     </div>
 
     <div style="float:right; width: 70%; height: fit-content;">

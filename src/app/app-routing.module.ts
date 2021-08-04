@@ -20,7 +20,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'category',
+    path: 'category/:category',
     loadChildren: () => import('./pages/category/category.module').then(m => m.CategoryPageModule)
   },
   {
@@ -28,7 +28,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/comments/comments.module').then(m => m.CommentsPageModule)
   },
   {
-    path: 'post',
+    path: 'post/:idpost',
     loadChildren: () => import('./pages/post/post.module').then(m => m.PostPageModule)
   },
   {

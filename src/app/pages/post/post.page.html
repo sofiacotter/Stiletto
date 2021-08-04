@@ -10,17 +10,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="isLoaded1 && isLoaded2 && isLoaded3">
 
     <!-- Header: Avatar + Username -->
     <ion-row id='postHeader'>
       <ion-col size="2">
         <ion-avatar>
-          <img src="{{avatar}}">
+          <img src="{{postInfo.profilephoto}}">
         </ion-avatar>
       </ion-col>
       <ion-col size="7">
-        <p style="color: black;">{{username}}</p>
+        <p style="color: black;">{{postInfo.username}}</p>
       </ion-col>
       <ion-col size="3">
         <ion-button style="float: right;" fill="clear" (click)="OpenPostOptions($event)">
@@ -33,7 +33,7 @@
   
     <!-- Imagem -->
     <ion-row>
-      <img src="{{image}}">
+      <img src="{{postInfo.imagepath}}">
     </ion-row>
     
     
@@ -52,14 +52,16 @@
           </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
-            <ion-button fill="clear">
-              <ion-icon ion-align-self-center name="heart-outline"></ion-icon>
+            <ion-button fill="clear" (click)="Like()">
+              <ion-icon ion-align-self-center name="heart-outline" *ngIf="!isLiked"></ion-icon>
+              <ion-icon ion-align-self-center name="heart" *ngIf="isLiked"></ion-icon>
               <ion-label ion-align-self-center>{{nliked}}</ion-label>
             </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
-            <ion-button fill="clear">
-              <ion-icon ion-align-self-center name="bookmark-outline"></ion-icon>
+            <ion-button fill="clear" (click)="Save()">
+              <ion-icon ion-align-self-center name="bookmark-outline" *ngIf="!isSaved"></ion-icon>
+              <ion-icon ion-align-self-center name="bookmark" *ngIf="isSaved"></ion-icon>
               <ion-label ion-align-self-center>{{nsaved}}</ion-label>
             </ion-button>
         </ion-col>
@@ -73,13 +75,13 @@
   
     <!-- Descrição -->
     <ion-row class="descriptionbox">
-      <p>{{description}}</p>
+      <p>{{postInfo.description}}</p>
     </ion-row>
   
   
      <!-- Hashtags -->
      <ion-row class="hashtagsbox">
-      <p>{{hashtags}}</p>
+      <p>{{postInfo.hashtags}}</p>
     </ion-row>
     
   </ion-card>

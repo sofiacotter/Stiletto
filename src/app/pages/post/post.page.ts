@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
 import { PopoverController } from '@ionic/angular';
+import { PostInfo } from 'src/app/details';
+import { FireService } from 'src/app/services/fire.service';
 
 
 @Component({
@@ -12,30 +14,135 @@ import { PopoverController } from '@ionic/angular';
 })
 export class PostPage implements OnInit {
 
-  image: string;
-  username:string;
-  avatar: string;
-  nsaved: number;
-  nliked: number;
-  ncommented: number;
-  description: string;
-  hashtags: string;
+  idpost: string; 
+  nsaved: number = 0;
+  nliked: number = 0;
+  ncommented: number = 0;
+  public isLoaded1 = false;
+  public isLoaded2 = false;
+  public isLoaded3 = false;
+
+  public isLiked = false;
+  public isSaved = false;
+  usernamesLiked: any[];
+  usernamesSaves: any[];
+  postsSavedByMe: any[];
+  uid: string;
+
+
+  postInfo: PostInfo;
 
   //this.router.navigate(["/tabs/search"]);
-  constructor(private router: Router, private location: Location, private popCtrl: PopoverController) {
+  constructor(private router: Router, private location: Location, 
+    private popCtrl: PopoverController, private activatedRoute: ActivatedRoute,
+    private fser: FireService) {
     
+      this.idpost = "CCJSlDnG7vecDDHLyXgC";
+      console.log("IDPOST: ", this.idpost);
+      //this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
   }
 
   ngOnInit() {
-    this.image = "../assets/images/flowerpower.jpg";
-    this.avatar = "../assets/images/cottagecore1.jpeg";
-    this.nsaved = 31;
-    this.nliked = 345;
-    this.ncommented = 28;
-    this.username = 'sofiacotter'
-    this.description = "I took this lovely outfit to a picnic and my friends adored it! Yellow is my favorite color now. Let´s show the world that dressing flower patterns is not cheesy :p";
-    this.hashtags = "#art #flowerpower #vintage";
+
+    this.uid = this.fser.getUid();
+
+
+    /*
+    BUSCAR IMAGEM, USERNAME, DESCRIÇÃO, HASHTAGS, FOTO DE PERFIL E DATA/HORA
+    */
+    this.fser.getPost(this.idpost).subscribe(data => {
+      data.map(e => {
+        this.postInfo = {
+          idpost: e.payload.doc.id,
+          imagepath: e.payload.doc.data()['imagepath'],
+          username: e.payload.doc.data()['username'],
+          profilephoto: e.payload.doc.data()['profilephoto'],
+          description: e.payload.doc.data()['description'],
+          hashtags: e.payload.doc.data()['hashtags'],
+          datetime: e.payload.doc.data()['datetime']
+        };
+      });
+      this.isLoaded1 = true;
+      console.log("Post Info: ", this.postInfo);
+    });
+
+
+
+
+
+    /*
+    BUSCAR LISTA DE USERNAMES QUE DEU LIKE
+    */
+    this.fser.getUsersLikes(this.idpost).subscribe(data =>{
+      this.usernamesLiked = data.map(e => {
+        return  e.payload.doc.data()['uid']
+      })
+      this.isLiked = this.usernamesLiked.includes(this.uid);
+      this.nliked = this.usernamesLiked.length;
+      this.isLoaded2 = true;
+      console.log("usernamesLiked: ", this.usernamesLiked);
+      console.log("Likes: ", this.nliked);
+    });
+
+
+
+
+    /*
+    BUSCAR LISTA DE USERNAMES QUE FEZ SAVE
+    */
+   /*
+    this.fser.getUsersSaves(this.idpost).subscribe(data =>{
+      this.usernamesSaves = data.map(e => {
+        return  e.payload.doc.data()['uid']
+      })
+      this.isSaved = this.usernamesSaves.includes(this.uid);
+      this.nsaved = this.usernamesSaves.length;
+      this.isLoaded3 = true;
+      console.log("usernamesSaved: ", this.usernamesSaves);
+      console.log("Saved: ", this.nsaved);
+    });
+    */
+
+
+
+
+
+
+    this.fser.getUsersSaves(this.idpost).subscribe(data =>{
+      this.postsSavedByMe = data.map(e => {
+        return  e.payload.doc.data()['idpost']
+      })
+      this.isSaved = this.postsSavedByMe.includes(this.idpost);
+      this.isLoaded3 = true;
+      console.log("PostsSavedByMe: ", this.postsSavedByMe);
+      console.log("Saved: ", this.nsaved);
+    });
+
+
+
+
+  this.fser.getAllSaves(this.idpost);
+
+
+
+
+    this.nsaved = 8;
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -56,6 +163,22 @@ export class PostPage implements OnInit {
       });
       
       return await popover.present();
+  }
+
+
+
+  Like(){
+    if (this.isLiked) this.isLiked = false;
+    else this.isLiked = true;
+    console.log("Clicou no Like!");
+    console.log("isLiked: ", this.isLiked);
+  }
+
+  Save(){
+    if (this.isSaved) this.isSaved = false;
+    else this.isSaved = true;
+    console.log("Clicou no Saved!");
+    console.log("isSaved: ", this.isSaved);
   }
 
 }
