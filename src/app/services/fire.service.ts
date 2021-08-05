@@ -76,17 +76,68 @@ export class FireService {
 
 
   
-  getAllSaves(idpost: string){
-    console.log("getAllSaves() --> ", this.af.collectionGroup('saves', ref => ref.where('idpost', '==', idpost)).get());
-    return this.af.collection('saves').doc().collection('posts', ref => ref.where('idpost', '==', idpost)).get();
+  getSavesByPost(idpost: string){
+    console.log("getSavesByPost() --> ", this.af.collection('savesByPost').doc(idpost).collection('users').snapshotChanges());
+    return this.af.collection('savesByPost').doc(idpost).collection('users').snapshotChanges();
 
   }
 
 
-  getUsersSaves(idpost: string){
+
+  getSavesByUser(){
     let uid = firebase.auth().currentUser.uid;
-    return this.af.collection('saves').doc(uid).collection('posts', ref => ref.where('idpost', '==', idpost)).snapshotChanges();
+    console.log("getSavesByUser() --> ", this.af.collection('saves').doc(uid).collection('posts').snapshotChanges());
+    return this.af.collection('saves').doc(uid).collection('posts').snapshotChanges();
   }
+
+
+
+
+  Like(idpost:string){
+
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('likes').doc(idpost).collection('users').doc(userID).set({uid: userID});
+  }
+
+  Deslike(idpost:string){
+
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('likes').doc(idpost).collection('users').doc(userID).delete();
+  }
+
+
+
+
+
+  SavePostInUser(idpost:string, filename:string){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('saves').doc(userID).collection('posts').doc(idpost).set({
+      uid: userID,
+      imagepath: filename
+    });
+  }
+
+  SaveUserInPost(idpost: string){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('savesByPost').doc(idpost).collection('users').doc(userID).set({uid: userID});
+  }
+
+
+
+
+
+  UnsaveUserInPost(idpost:string){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('savesByPost').doc(idpost).collection('users').doc(userID).delete();
+  }
+
+
+  UnsavePostInUser(idpost: string){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('saves').doc(userID).collection('posts').doc(idpost).delete();
+  }
+
+
 
 
 

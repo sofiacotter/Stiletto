@@ -22,11 +22,11 @@ export class PostPage implements OnInit {
   public isLoaded2 = false;
   public isLoaded3 = false;
 
-  public isLiked = false;
-  public isSaved = false;
+  public isLiked: boolean;
+  public isSaved: boolean;
   usernamesLiked: any[];
   usernamesSaves: any[];
-  postsSavedByMe: any[];
+  allSaves: any;
   uid: string;
 
 
@@ -45,6 +45,7 @@ export class PostPage implements OnInit {
   ngOnInit() {
 
     this.uid = this.fser.getUid();
+    console.log("UID: ", this.uid);
 
 
     /*
@@ -80,53 +81,24 @@ export class PostPage implements OnInit {
       this.isLiked = this.usernamesLiked.includes(this.uid);
       this.nliked = this.usernamesLiked.length;
       this.isLoaded2 = true;
-      console.log("usernamesLiked: ", this.usernamesLiked);
+      console.log("this.usernamesLiked: ", this.usernamesLiked);
       console.log("Likes: ", this.nliked);
     });
 
 
 
 
-    /*
-    BUSCAR LISTA DE USERNAMES QUE FEZ SAVE
-    */
-   /*
-    this.fser.getUsersSaves(this.idpost).subscribe(data =>{
+    /*retorna lista de uids que guardaram este post */
+    this.fser.getSavesByPost(this.idpost).subscribe(data =>{
       this.usernamesSaves = data.map(e => {
         return  e.payload.doc.data()['uid']
       })
       this.isSaved = this.usernamesSaves.includes(this.uid);
       this.nsaved = this.usernamesSaves.length;
       this.isLoaded3 = true;
-      console.log("usernamesSaved: ", this.usernamesSaves);
+      console.log("this.usernamesSaves: ", this.usernamesSaves);
       console.log("Saved: ", this.nsaved);
     });
-    */
-
-
-
-
-
-
-    this.fser.getUsersSaves(this.idpost).subscribe(data =>{
-      this.postsSavedByMe = data.map(e => {
-        return  e.payload.doc.data()['idpost']
-      })
-      this.isSaved = this.postsSavedByMe.includes(this.idpost);
-      this.isLoaded3 = true;
-      console.log("PostsSavedByMe: ", this.postsSavedByMe);
-      console.log("Saved: ", this.nsaved);
-    });
-
-
-
-
-  this.fser.getAllSaves(this.idpost);
-
-
-
-
-    this.nsaved = 8;
 
   }
 
@@ -168,16 +140,68 @@ export class PostPage implements OnInit {
 
 
   Like(){
-    if (this.isLiked) this.isLiked = false;
-    else this.isLiked = true;
+    if (this.isLiked){
+      this.fser.Deslike(this.idpost).then( res => {
+        this.isLiked = false;
+      }, err => {
+        console.log("ERRO AO DAR LIKE!");
+      })
+    } 
+    else{
+      this.fser.Like(this.idpost).then( res => {
+        this.isLiked = true;
+      }, err => {
+        console.log("ERRO AO DAR LIKE!");
+      })
+    }
     console.log("Clicou no Like!");
     console.log("isLiked: ", this.isLiked);
   }
 
+
+
+
+
+
+
+
   Save(){
-    if (this.isSaved) this.isSaved = false;
-    else this.isSaved = true;
-    console.log("Clicou no Saved!");
+
+    if (this.isSaved){
+      this.fser.UnsavePostInUser(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR UNSAVE 1!");
+      })
+      this.fser.UnsaveUserInPost(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR UNSAVE 2!");
+      })
+      this.isSaved = false;
+    } 
+
+
+
+
+
+
+
+    else{
+      this.fser.SavePostInUser(this.idpost, this.postInfo.imagepath).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR SAVE 1!");
+      })
+      this.fser.SaveUserInPost(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR SAVE 2!");
+      })
+      this.isSaved = true;
+    }
+
+
+
+
+
+    console.log("Clicou no Save!");
     console.log("isSaved: ", this.isSaved);
   }
 

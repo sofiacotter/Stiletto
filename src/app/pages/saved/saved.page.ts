@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, OnChanges, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PopoverController } from '@ionic/angular';
+import { SearchResults } from 'src/app/details';
+import { FireService } from 'src/app/services/fire.service';
 
 
 
@@ -10,31 +13,53 @@ import { Router } from '@angular/router';
 })
 export class SavedPage implements OnInit {
   images: string[];
+  public results: SearchResults[] = [];
+  public isLoaded = false;
 
 
   //this.router.navigate(["/tabs/search"]);
-  constructor(private router: Router) { 
-    this.images = ["../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-    "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg"];
-
-
+  constructor(private router: Router, private fser: FireService) { 
+    console.log("CONSTRUTOR DE SAVED.PAGE.TS");
   }
 
   ngOnInit() {
+
+    this.GetSavedPosts();
+    
+
+  }
+
+
+  GetSavedPosts(){
+    this.results = [];
+
+    this.fser.getSavesByUser().subscribe(data => {
+      console.log(data)
+      data.map(e => {
+        this.results.push({
+          idpost: e.payload.doc.id,
+          imagepath: e.payload.doc.data()['imagepath'],
+        });
+      });
+      this.isLoaded = true;
+      console.log("Saved Posts: ", this.results);
+    });
   }
 
 
 
 
-  OpenPost(){
-    console.log("You clicked on an image!");
+
+
+
+
+
+
+
+
+  OpenPost(idpost: string){
+    console.log("Idpost: ", idpost);
+    this.router.navigate(["/post/"+idpost]);
   }
   
 }
