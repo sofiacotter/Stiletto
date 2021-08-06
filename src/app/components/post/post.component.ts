@@ -21,17 +21,17 @@ export class PostComponent implements OnInit {
   ncommented: number;
   description: string;
   hashtags: string;
-  id: string;
+  idpost: string;
 
   constructor(private popCtrl: PopoverController, private router: Router) {}
 
   ngOnInit() {
-    this.id = "askaoskaoksoajisaisj";
+    this.idpost = "askaoskaoksoajisaisj";
     this.image = "../assets/images/flowerpower.jpg";
-    this.avatar = "../assets/images/cottagecore1.jpeg";
+    this.avatar = "../assets/images/profilepics/profile2.jpeg";
     this.nsaved = 31;
     this.nliked = 345;
-    this.ncommented = 28;
+    this.ncommented = 2; //somar a este valor
     this.username = 'sofiacotter'
     this.description = "I took this lovely outfit to a picnic and my friends adored it! Yellow is my favorite color now. Let´s show the world that dressing flower patterns is not cheesy :p";
     this.hashtags = "#art #flowerpower #vintage";
@@ -52,7 +52,7 @@ export class PostComponent implements OnInit {
 
 
   OpenComments(){
-    this.router.navigate(["/comments",{id: this.id}]);
+    this.router.navigate(["/comments",{id: this.idpost}]);
     
   }
 

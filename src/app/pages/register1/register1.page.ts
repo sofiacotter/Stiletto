@@ -79,7 +79,7 @@ export class Register1Page implements OnInit, OnDestroy {
       uid: '',
       email: this.message.email,
       username: value.username,
-      profilephoto: "../assets/images/profile.png"
+      profilephoto: "../assets/images/profilepics/default.png"
     }
 
     // Verificar se existe algum username na base de dados com este valor inserido

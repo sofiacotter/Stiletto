@@ -45,23 +45,23 @@
         <ion-col size="3">
   
         </ion-col>
-        <ion-col size="3" class="icons">
+        <ion-col size="3" class="icons" (click)="OpenComments()">
           <ion-button fill="clear">
-            <ion-icon ion-align-self-center name="pencil-outline"></ion-icon>
+            <ion-icon style="padding: 3px;" ion-align-self-center name="pencil-outline"></ion-icon>
             <ion-label ion-align-self-center>{{ncommented}}</ion-label>
           </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
             <ion-button fill="clear" (click)="Like()">
-              <ion-icon ion-align-self-center name="heart-outline" *ngIf="!isLiked"></ion-icon>
-              <ion-icon ion-align-self-center name="heart" *ngIf="isLiked"></ion-icon>
+              <ion-icon style="padding: 3px;" ion-align-self-center name="heart-outline" *ngIf="!isLiked"></ion-icon>
+              <ion-icon style="padding: 3px;" ion-align-self-center name="heart" *ngIf="isLiked"></ion-icon>
               <ion-label ion-align-self-center>{{nliked}}</ion-label>
             </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
             <ion-button fill="clear" (click)="Save()">
-              <ion-icon ion-align-self-center name="bookmark-outline" *ngIf="!isSaved"></ion-icon>
-              <ion-icon ion-align-self-center name="bookmark" *ngIf="isSaved"></ion-icon>
+              <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark-outline" *ngIf="!isSaved"></ion-icon>
+              <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark" *ngIf="isSaved"></ion-icon>
               <ion-label ion-align-self-center>{{nsaved}}</ion-label>
             </ion-button>
         </ion-col>

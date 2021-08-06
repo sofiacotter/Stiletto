@@ -19,22 +19,21 @@ export class SavedPage implements OnInit {
 
   //this.router.navigate(["/tabs/search"]);
   constructor(private router: Router, private fser: FireService) { 
-    console.log("CONSTRUTOR DE SAVED.PAGE.TS");
+
   }
 
   ngOnInit() {
 
     this.GetSavedPosts();
     
-
   }
 
 
   GetSavedPosts(){
-    this.results = [];
 
     this.fser.getSavesByUser().subscribe(data => {
       console.log(data)
+      this.results = [];
       data.map(e => {
         this.results.push({
           idpost: e.payload.doc.id,

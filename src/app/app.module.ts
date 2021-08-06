@@ -13,6 +13,7 @@ import { AngularFireStorageModule } from "@angular/fire/storage";
 
 
 
+
 export const firebaseConfig = {
   apiKey: "AIzaSyAJQDt2T1Bl6KrCoKJOAfb3q0Sun8z9dOQ",
   authDomain: "stiletto-5b547.firebaseapp.com",
@@ -37,7 +38,7 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
    ],
    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

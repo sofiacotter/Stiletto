@@ -22,4 +22,16 @@ export class PostInfo{
     datetime: any;
 }
 
+
+
+
+
+
+export class CommentsResults{
+    username: string;
+    imagepath: string;
+    comment: string;
+    datetime: string;
+}
+
    

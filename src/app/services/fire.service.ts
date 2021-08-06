@@ -139,6 +139,32 @@ export class FireService {
 
 
 
+  // Usar para obter a contagem de comentários
+  getComments(idpost: string){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('comments').doc(idpost).collection('commentsInPost').snapshotChanges();
+  }
+
+
+  WriteComment(idpost: string, username1: string, imagepath1: string, comment1: string){
+    const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
+    const hour = datetime.slice(0, 10);
+    const time = datetime.slice(11, 19);
+    const publicationDate = hour + " " + time;
+    console.log("Data de Publicação: ", publicationDate);
+    return this.af.collection('comments').doc(idpost).collection('commentsInPost').add({
+      username: username1,
+      imagepath: imagepath1,
+      datetime: publicationDate,
+      comment: comment1
+    });
+  }
+
+
+
+
+
+
 
 
 

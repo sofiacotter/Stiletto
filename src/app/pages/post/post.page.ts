@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
 import { PopoverController } from '@ionic/angular';
-import { PostInfo } from 'src/app/details';
+import { CommentsResults, PostInfo } from 'src/app/details';
 import { FireService } from 'src/app/services/fire.service';
 
 
@@ -17,15 +17,17 @@ export class PostPage implements OnInit {
   idpost: string; 
   nsaved: number = 0;
   nliked: number = 0;
-  ncommented: number = 0;
+  ncommented: number = 2;
   public isLoaded1 = false;
   public isLoaded2 = false;
   public isLoaded3 = false;
+  public isLoaded4 = false;
 
   public isLiked: boolean;
   public isSaved: boolean;
   usernamesLiked: any[];
   usernamesSaves: any[];
+  public comments: CommentsResults[] = [];
   allSaves: any;
   uid: string;
 
@@ -37,9 +39,9 @@ export class PostPage implements OnInit {
     private popCtrl: PopoverController, private activatedRoute: ActivatedRoute,
     private fser: FireService) {
     
-      this.idpost = "CCJSlDnG7vecDDHLyXgC";
+      //this.idpost = "CCJSlDnG7vecDDHLyXgC";
       console.log("IDPOST: ", this.idpost);
-      //this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
+      this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
   }
 
   ngOnInit() {
@@ -98,6 +100,31 @@ export class PostPage implements OnInit {
       this.isLoaded3 = true;
       console.log("this.usernamesSaves: ", this.usernamesSaves);
       console.log("Saved: ", this.nsaved);
+    });
+
+
+
+
+
+
+
+
+
+    // BUSCAR CONTAGEM DE COMENTÁRIOS
+    this.fser.getComments(this.idpost).subscribe(data => {
+      console.log(data)
+      this.comments = [];
+      data.map(e => {
+        this.comments.push({
+          username: e.payload.doc.data()['username'],
+          imagepath: e.payload.doc.data()['imagepath'],
+          comment: e.payload.doc.data()['comment'],
+          datetime: e.payload.doc.data()['datetime']
+        });
+      });
+      this.ncommented = 2 + this.comments.length;
+      this.isLoaded4 = true;
+      console.log("Comments made: ", this.comments);
     });
 
   }
@@ -203,6 +230,21 @@ export class PostPage implements OnInit {
 
     console.log("Clicou no Save!");
     console.log("isSaved: ", this.isSaved);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  OpenComments(){
+    this.router.navigate(["/comments",{id: this.idpost}]);
   }
 
 }
