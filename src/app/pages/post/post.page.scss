@@ -9,14 +9,26 @@ p{
 
 .descriptionbox{
     background-color: white;
-    padding: 3%;
+    padding-left: 4%;
+    padding-right: 4%;
+    font-size: 14px; 
+    font-family: 'Nunito Sans'; 
     color: black;
 }
 
 .hashtagsbox{
     background-color: white;
-    padding: 3%;
+    padding-left: 4%;
     color:mediumblue;
+}
+
+
+.datetimebox{
+    background-color: white;
+    width: 100%;
+    float: left; 
+    padding-left: 4%;
+    color:'#8e8e8e';
 }
 
 #postHeader{

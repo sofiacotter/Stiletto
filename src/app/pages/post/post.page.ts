@@ -40,7 +40,7 @@ export class PostPage implements OnInit {
     private fser: FireService) {
     
       //this.idpost = "CCJSlDnG7vecDDHLyXgC";
-      console.log("IDPOST: ", this.idpost);
+      console.log("Idpost post.page: ", this.idpost);
       this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
   }
 

@@ -58,7 +58,8 @@ export class CategoryPage implements OnInit {
       console.log(data)
       data.map(e => {
         this.results.push({
-          idpost: e.payload.doc.id,
+          //idpost: e.payload.doc.id,
+          idpost: e.payload.doc.data()['idpost'],
           imagepath: e.payload.doc.data()['imagepath'],
         });
       });
@@ -70,7 +71,7 @@ export class CategoryPage implements OnInit {
 
 
   OpenPost(idpost: string){
-    console.log("Idpost: ", idpost);
+    console.log("Idpost category.page: ", idpost);
     this.router.navigate(["/post/"+idpost]);
   }
 
