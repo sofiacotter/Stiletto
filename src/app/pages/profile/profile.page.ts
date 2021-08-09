@@ -6,7 +6,7 @@ import { FireService } from 'src/app/services/fire.service';
 import { FireauthService } from 'src/app/services/fireauth.service';
 import firebase from 'firebase/app';
 import { isNgTemplate } from '@angular/compiler';
-import { userDetails } from 'src/app/details';
+import { SearchResults, userDetails } from 'src/app/details';
 
 
 @Component({
@@ -18,31 +18,20 @@ export class ProfilePage implements OnInit {
 
   username: string;
   profilepic: string;
-  images: string[];
   nposts: number;
   nfollowing: number;
   nfollowers: number;
   public userInfo: userDetails = null;
-  public isLoaded=false;
+  public isLoaded1 =false;
+  public isLoaded2 =false;
+  public results: SearchResults[] = [];
 
 
 
   constructor(private router: Router, private popCtrl: PopoverController,
     private fser: FireService, private authService: FireauthService) {
-    //this.username = "SofiaCotter";
-    //this.profilepic = "../assets/images/cottagecore1.jpeg";
-    this.nposts = 15;
     this.nfollowers = 456;
     this.nfollowing = 36;
-    this.images = ["../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg",
-      "../assets/images/flowerpower.jpg", "../assets/images/flowerpower.jpg"];
   }
 
 
@@ -50,7 +39,6 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
       this.fser.getUserDetails().subscribe(data => {
-        console.log(data)
         data.map(e => {
           this.userInfo = {
 
@@ -60,8 +48,23 @@ export class ProfilePage implements OnInit {
             profilephoto: e.payload.doc.data()['profilephoto']
           };
         });
-        this.isLoaded = true;
+        this.isLoaded1 = true;
         console.log("User Info: ", this.userInfo);
+      });
+
+
+
+      this.fser.getProfilePictures().subscribe(data => {
+        data.map(e => {
+          this.results.push({
+            //idpost: e.payload.doc.id,
+            idpost: e.payload.doc.data()['idpost'],
+            imagepath: e.payload.doc.data()['imagepath'],
+          });
+        });
+        this.nposts = this.results.length;
+        this.isLoaded2 = true;
+        console.log("Results Found: ", this.results);
       });
   }
 
@@ -79,8 +82,8 @@ export class ProfilePage implements OnInit {
   }
 
 
-  OpenPost() {
-    console.log("You clicked on an image!");
-    this.router.navigate(["/post"]);
+  OpenPost(idpost: string){
+    console.log("Idpost category.page: ", idpost);
+    this.router.navigate(["/post/"+idpost]);
   }
 }

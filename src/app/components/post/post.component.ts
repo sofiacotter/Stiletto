@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { PostpopComponent } from '../postpop/postpop.component';
 import { Router } from '@angular/router';
+import { CommentsResults, PostInfo } from 'src/app/details';
+import { FireService } from 'src/app/services/fire.service';
 
 
 @Component({
@@ -12,36 +14,60 @@ import { Router } from '@angular/router';
 export class PostComponent implements OnInit {
 
 
-  images: string[];
-  image: string;
-  username:string;
-  avatar: string;
-  nsaved: number;
-  nliked: number;
-  ncommented: number;
-  description: string;
-  hashtags: string;
+
+
+  @Input()
+  uid: string;
+
+  @Input()
   idpost: string;
 
-  constructor(private popCtrl: PopoverController, private router: Router) {}
+  @Input()
+  username: string;
+
+  @Input()
+  profilephoto: string;
+
+  @Input()
+  imagepath: string;
+
+  @Input()
+  description: string;
+
+  @Input()
+  hashtags: string;
+
+  @Input()
+  datetime: string;
+
+  @Input()
+  ncommented: number;
+
+  @Input()
+  nlikes: number;
+
+  @Input()
+  nsaves: number;
+
+  @Input()
+  isSaved: boolean;
+
+  @Input()
+  isLiked: boolean;
+
+
+
+
+  constructor(private popCtrl: PopoverController, private router: Router, private fser: FireService) {}
 
   ngOnInit() {
-    this.idpost = "askaoskaoksoajisaisj";
-    this.image = "../assets/images/flowerpower.jpg";
-    this.avatar = "../assets/images/profilepics/profile2.jpeg";
-    this.nsaved = 31;
-    this.nliked = 345;
-    this.ncommented = 2; //somar a este valor
-    this.username = 'sofiacotter'
-    this.description = "I took this lovely outfit to a picnic and my friends adored it! Yellow is my favorite color now. Let´s show the world that dressing flower patterns is not cheesy :p";
-    this.hashtags = "#art #flowerpower #vintage";
+    this.ncommented += 2;
   }
 
 
 
   async OpenPostOptions(ev: any){
     console.log("Here are your options...");
-
     const popover = await this.popCtrl.create({
       component: PostpopComponent,
       event: ev
@@ -55,5 +81,75 @@ export class PostComponent implements OnInit {
     this.router.navigate(["/comments",{id: this.idpost}]);
     
   }
+
+
+
+
+  Like(){
+    if (this.isLiked){
+      this.fser.Deslike(this.idpost).then( res => {
+        this.isLiked = false;
+      }, err => {
+        console.log("ERRO AO DAR LIKE!");
+      })
+    } 
+    else{
+      this.fser.Like(this.idpost).then( res => {
+        this.isLiked = true;
+      }, err => {
+        console.log("ERRO AO DAR LIKE!");
+      })
+    }
+    console.log("Clicou no Like!");
+    console.log("isLiked: ", this.isLiked);
+  }
+
+
+
+
+
+
+
+
+  Save(){
+
+    if (this.isSaved){
+      this.fser.UnsavePostInUser(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR UNSAVE 1!");
+      })
+      this.fser.UnsaveUserInPost(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR UNSAVE 2!");
+      })
+      this.isSaved = false;
+    } 
+
+
+
+
+
+
+
+    else{
+      this.fser.SavePostInUser(this.idpost, this.imagepath).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR SAVE 1!");
+      })
+      this.fser.SaveUserInPost(this.idpost).then( res => {
+      }, err => {
+        console.log("ERRO AO DAR SAVE 2!");
+      })
+      this.isSaved = true;
+    }
+
+
+
+
+
+    console.log("Clicou no Save!");
+    console.log("isSaved: ", this.isSaved);
+  }
+
 
 }

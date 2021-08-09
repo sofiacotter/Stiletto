@@ -2,12 +2,12 @@
 
   <!-- Header: Avatar + Username -->
   <ion-row id='postHeader'>
-    <ion-col size="3">
+    <ion-col size="2">
       <ion-avatar>
-        <img src="{{avatar}}">
+        <img src="{{profilephoto}}">
       </ion-avatar>
     </ion-col>
-    <ion-col size="6">
+    <ion-col size="7">
       <p style="color: black;">{{username}}</p>
     </ion-col>
     <ion-col size="3">
@@ -21,7 +21,7 @@
 
   <!-- Imagem -->
   <ion-row>
-    <img src="{{image}}">
+    <img src="{{imagepath}}">
   </ion-row>
   
   
@@ -33,22 +33,24 @@
       <ion-col size="3">
 
       </ion-col>
-      <ion-col size="3" class="icons">
-        <ion-button fill="clear" (click)=OpenComments()>
-          <ion-icon ion-align-self-center name="pencil-outline"></ion-icon>
+      <ion-col size="3" class="icons" (click)="OpenComments()">
+        <ion-button fill="clear">
+          <ion-icon style="padding: 3px;" ion-align-self-center name="pencil-outline"></ion-icon>
           <ion-label ion-align-self-center>{{ncommented}}</ion-label>
         </ion-button>
       </ion-col>
       <ion-col size="3" class="icons">
-          <ion-button fill="clear">
-            <ion-icon ion-align-self-center name="heart-outline"></ion-icon>
-            <ion-label ion-align-self-center>{{nliked}}</ion-label>
+          <ion-button fill="clear" (click)="Like()">
+            <ion-icon style="padding: 3px;" ion-align-self-center name="heart-outline" *ngIf="!isLiked"></ion-icon>
+            <ion-icon style="padding: 3px;" ion-align-self-center name="heart" *ngIf="isLiked"></ion-icon>
+            <ion-label ion-align-self-center>{{nlikes}}</ion-label>
           </ion-button>
       </ion-col>
       <ion-col size="3" class="icons">
-          <ion-button fill="clear">
-            <ion-icon ion-align-self-center name="bookmark-outline"></ion-icon>
-            <ion-label ion-align-self-center>{{nsaved}}</ion-label>
+          <ion-button fill="clear" (click)="Save()">
+            <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark-outline" *ngIf="!isSaved"></ion-icon>
+            <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark" *ngIf="isSaved"></ion-icon>
+            <ion-label ion-align-self-center>{{nsaves}}</ion-label>
           </ion-button>
       </ion-col>
     </ion-row>
@@ -69,5 +71,12 @@
    <ion-row class="hashtagsbox">
     <p>{{hashtags}}</p>
   </ion-row>
+
+  <!-- Data de Publicação -->
+  <ion-row class="datetimebox">
+    <p style="font-size: 14px">{{datetime}}</p>
+  </ion-row>
+
+
   
 </ion-card>

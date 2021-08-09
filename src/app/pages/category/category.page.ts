@@ -24,8 +24,7 @@ export class CategoryPage implements OnInit {
   public results: SearchResults[] = [];
  
 
-  constructor(private fser: FireService, private authService: FireauthService,
-    private router: Router, private activatedRoute: ActivatedRoute) { 
+  constructor(private fser: FireService, private router: Router, private activatedRoute: ActivatedRoute) { 
 
 
 
@@ -66,7 +65,6 @@ export class CategoryPage implements OnInit {
       this.isLoaded = true;
       console.log("Results Found: ", this.results);
     });
-    console.log("Done with ngOnInit");
   }
 
 

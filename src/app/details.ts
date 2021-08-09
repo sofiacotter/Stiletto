@@ -19,7 +19,7 @@ export class PostInfo{
     profilephoto: string;
     description: string;
     hashtags: string;
-    datetime: any;
+    datetime: string;
 }
 
 
@@ -32,6 +32,32 @@ export class CommentsResults{
     imagepath: string;
     comment: string;
     datetime: string;
+}
+
+
+
+
+
+
+
+
+
+
+
+export class TimelinePost{
+  uid: string;
+  idpost: string;
+  username: string;
+  profilephoto: string;
+  imagepath: string;
+  description: string;
+  hashtags: string;
+  datetime: string;
+  ncommented: number;
+  nlikes: number;
+  nsaves: number;
+  isSaved: boolean;
+  isLiked: boolean;
 }
 
    

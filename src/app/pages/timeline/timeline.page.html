@@ -6,10 +6,14 @@
 
 <ion-content>
   
-    <app-post></app-post>
-    <app-post></app-post>
-    <app-post></app-post>
-    <app-post></app-post>
-  
+ 
+  <div *ngFor="let post of posts">
+  <app-post [idpost] = "post.idpost" [uid] = "post.uid"
+    [username] = "post.username" [profilephoto] = "post.profilephoto" [imagepath] = "post.imagepath"
+    [description] = "post.description" [datetime] = "post.datetime" [hashtags] = "post.hashtags" 
+    [ncommented] = "post.ncommented" [nsaves] = "post.nsaves" [nlikes] = "post.nlikes" 
+    [isLiked] = "post.isLiked" [isSaved] = "post.isSaved" >
+  </app-post>
+  </div>  
 
 </ion-content>

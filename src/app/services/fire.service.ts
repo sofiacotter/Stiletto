@@ -60,6 +60,13 @@ export class FireService {
   }
 
 
+  getProfilePictures(){
+    let uid = firebase.auth().currentUser.uid;
+    console.log("getProfilePictures() --> ", this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges());
+    return this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges();
+  }
+
+
 
   getPost(idpost: string){
     console.log("getPost() --> ", this.af.collection('posts', ref => ref.where('idpost', '==', idpost)).snapshotChanges());
