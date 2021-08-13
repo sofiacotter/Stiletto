@@ -16,8 +16,6 @@ import { SearchResults, userDetails } from 'src/app/details';
 })
 export class ProfilePage implements OnInit {
 
-  username: string;
-  profilepic: string;
   nposts: number;
   nfollowing: number;
   nfollowers: number;
@@ -25,6 +23,8 @@ export class ProfilePage implements OnInit {
   public isLoaded1 =false;
   public isLoaded2 =false;
   public results: SearchResults[] = [];
+  public isFollow: boolean = false;
+  uid:string;
 
 
 
@@ -38,7 +38,12 @@ export class ProfilePage implements OnInit {
 
 
   ngOnInit() {
-      this.fser.getUserDetails().subscribe(data => {
+
+    this.uid = this.fser.getUid();
+
+
+
+      this.fser.getUserDetails(this.uid).subscribe(data => {
         data.map(e => {
           this.userInfo = {
 
@@ -54,7 +59,7 @@ export class ProfilePage implements OnInit {
 
 
 
-      this.fser.getProfilePictures().subscribe(data => {
+      this.fser.getProfilePictures(this.uid).subscribe(data => {
         data.map(e => {
           this.results.push({
             //idpost: e.payload.doc.id,
@@ -85,5 +90,17 @@ export class ProfilePage implements OnInit {
   OpenPost(idpost: string){
     console.log("Idpost category.page: ", idpost);
     this.router.navigate(["/post/"+idpost]);
+  }
+
+
+
+  Follow(){
+    if(!this.isFollow) {
+      this.isFollow = true;
+    }
+    else {
+      this.isFollow = false;
+    }
+    console.log("Follow: ", this.isFollow);
   }
 }

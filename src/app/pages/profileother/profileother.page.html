@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="isLoaded1 && isLoaded2">{{userInfo.username}}</ion-title>
+    <ion-buttons left>
+      <ion-button fill="clear" (click)="BackPage()">
+          <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div id="top" *ngIf="isLoaded1 && isLoaded2">
+
+
+    <div id="profilephotodiv">
+      <img class="profile-photo" src="{{userInfo.profilephoto}}">
+    </div>
+
+    <div style="float:right; width: 70%; height: fit-content;">
+      <ion-grid class="headerinfo">
+        <ion-row>
+          <ion-col>
+            <p class="text">
+              <strong>{{nposts}}</strong><br>
+              <em>posts</em>
+            </p>
+          </ion-col>
+          <ion-col>
+            <p class="text">
+              <strong>{{nfollowers}}</strong><br>
+              <em>followers</em>
+            </p>
+          </ion-col>
+          <ion-col>
+            <p class="text">
+              <strong>{{nfollowing}}</strong><br>
+              <em>following</em>
+            </p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-button size="small" color="success" *ngIf="isFollow" (click)="Follow()">Following!</ion-button>
+          <ion-button size="small" color="dark" *ngIf="!isFollow" (click)="Follow()">Follow</ion-button>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+
+
+  </div>
+
+
+  <div id="bottom">
+    <ion-grid id="gallery" *ngIf="isLoaded1 && isLoaded2">
+      <ion-row>
+        <ion-col size="4" *ngFor="let result of results">
+          <ion-img src="{{result.imagepath}}" (click)="OpenPost(result.idpost)"></ion-img>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

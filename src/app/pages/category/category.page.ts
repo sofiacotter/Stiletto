@@ -17,8 +17,9 @@ import { SearchResults } from 'src/app/details';
   styleUrls: ['./category.page.scss'],
 })
 export class CategoryPage implements OnInit {
-  category: any;
+
   
+  category: any;
   public isLoaded=false;
   private n: SearchResults = {idpost: '', imagepath: ''};
   public results: SearchResults[] = [];

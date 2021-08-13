@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="isLoaded1 && isLoaded2 && isLoaded3">
+  <ion-card *ngIf="isLoaded1 && isLoaded2 && isLoaded3 && isLoaded4 && isUsernameLoaded">
 
     <!-- Header: Avatar + Username -->
     <ion-row id='postHeader'>
@@ -20,7 +20,9 @@
         </ion-avatar>
       </ion-col>
       <ion-col size="7">
-        <p style="color: black;">{{postInfo.username}}</p>
+        <ion-button fill="clear" (click)="GoToProfilePage()">
+          <p style="color: black;">{{postInfo.username}}</p>
+        </ion-button>
       </ion-col>
       <ion-col size="3">
         <ion-button style="float: right;" fill="clear" (click)="OpenPostOptions($event)">

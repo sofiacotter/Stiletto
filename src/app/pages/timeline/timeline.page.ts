@@ -30,7 +30,7 @@ export class TimelinePage implements OnInit {
 
   ngOnInit() {
     this.post1 = {
-      uid: "yWM2CPQnz3ZgMue0qLHM9YV2cnB2",
+      uid: "Wue635H4YoYV2U2bIVRT9Bqw4gB3",
       idpost: "1GD7sqtbPkOabXDjtna8",
       username: "liliannn",
       profilephoto: "../assets/images/profilepics/profile3.jpg",
@@ -45,7 +45,7 @@ export class TimelinePage implements OnInit {
       isLiked: true,    
     };
     this.post2 = {
-      uid: "yWM2CPQnz3ZgMue0qLHM9YV2cnB2",
+      uid: "Wue635H4YoYV2U2bIVRT9Bqw4gB3",
       idpost: "1GD7sqtbPkOabXDjtna8",
       username: "liliannn",
       profilephoto: "../assets/images/profilepics/profile3.jpg",

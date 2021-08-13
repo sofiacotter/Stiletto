@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'register1',
     loadChildren: () => import('./pages/register1/register1.module').then( m => m.Register1PageModule)
   },
+  {
+    path: 'profileother/:uid',
+    loadChildren: () => import('./pages/profileother/profileother.module').then( m => m.ProfileotherPageModule)
+  },
 ];
 @NgModule({
   imports: [

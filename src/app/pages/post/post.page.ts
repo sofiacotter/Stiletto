@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
 import { PopoverController } from '@ionic/angular';
-import { CommentsResults, PostInfo } from 'src/app/details';
+import { CommentsResults, PostInfo, userDetails } from 'src/app/details';
 import { FireService } from 'src/app/services/fire.service';
 
 
@@ -28,10 +28,11 @@ export class PostPage implements OnInit {
   usernamesLiked: any[];
   usernamesSaves: any[];
   public comments: CommentsResults[] = [];
+  public userInfo: userDetails = null;
   allSaves: any;
   uid: string;
 
-
+  isUsernameLoaded: boolean = false;
   postInfo: PostInfo;
 
   //this.router.navigate(["/tabs/search"]);
@@ -56,6 +57,7 @@ export class PostPage implements OnInit {
     this.fser.getPost(this.idpost).subscribe(data => {
       data.map(e => {
         this.postInfo = {
+          uid: e.payload.doc.data()['uid'],
           idpost: e.payload.doc.id,
           imagepath: e.payload.doc.data()['imagepath'],
           username: e.payload.doc.data()['username'],
@@ -125,6 +127,21 @@ export class PostPage implements OnInit {
       this.ncommented = 2 + this.comments.length;
       this.isLoaded4 = true;
       console.log("Comments made: ", this.comments);
+    });
+
+
+
+    this.fser.getUserDetails(this.uid).subscribe(data => {
+      data.map(e => {
+        this.userInfo = {
+
+          uid: e.payload.doc.data()['uid'],
+          email: e.payload.doc.data()['email'],
+          username: e.payload.doc.data()['username'],
+          profilephoto: e.payload.doc.data()['profilephoto']
+        };
+      });
+      this.isUsernameLoaded = true;  
     });
 
   }
@@ -245,6 +262,24 @@ export class PostPage implements OnInit {
 
   OpenComments(){
     this.router.navigate(["/comments",{id: this.idpost}]);
+  }
+
+
+
+
+
+
+  GoToProfilePage(){
+    console.log("GoToProfilePage()!");
+
+    if(this.uid === this.postInfo.uid){
+        console.log("It´s the same user!");
+        this.router.navigate(["/tabs/profile"]);
+    }
+    else{
+        console.log("It´s a different user! "+ this.postInfo.uid);
+        this.router.navigate(["/profileother/"+this.postInfo.uid]);
+    }
   }
 
 }

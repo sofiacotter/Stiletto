@@ -13,6 +13,7 @@ export class SearchResults {
 
 
 export class PostInfo{
+    uid: string;
     idpost: string;
     imagepath: string;
     username: string;

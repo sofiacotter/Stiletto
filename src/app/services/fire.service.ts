@@ -47,11 +47,12 @@ export class FireService {
     return this.af.collectionGroup('userDetails').snapshotChanges();
   }
 
-  getUserDetails(){
-    let currentUser = firebase.auth().currentUser;
-    console.log("getUserDetails() --> ", this.af.collection('userDetails', ref => ref.where('uid', '==', currentUser.uid)).snapshotChanges());
-    return this.af.collection('userDetails', ref => ref.where('uid', '==', currentUser.uid)).snapshotChanges();
+  getUserDetails(uid: string){
+    //let currentUser = firebase.auth().currentUser;
+    console.log("getUserDetails() --> ", this.af.collection('userDetails', ref => ref.where('uid', '==', uid)).snapshotChanges());
+    return this.af.collection('userDetails', ref => ref.where('uid', '==', uid)).snapshotChanges();
   }
+
 
 
   getSearchResults(category: string){
@@ -60,11 +61,11 @@ export class FireService {
   }
 
 
-  getProfilePictures(){
-    let uid = firebase.auth().currentUser.uid;
+  getProfilePictures(uid: string){
     console.log("getProfilePictures() --> ", this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges());
     return this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges();
   }
+
 
 
 

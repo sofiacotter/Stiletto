@@ -16,7 +16,7 @@ import { ToastController } from '@ionic/angular';
 })
 export class CommentsPage implements OnInit {
 
-
+  uid:string;
   idpost: any;
   public userInfo: userDetails = null;
   public isLoaded1 = false;
@@ -40,7 +40,7 @@ export class CommentsPage implements OnInit {
 
 
   ngOnInit() {
-
+    this.uid = this.fser.getUid();
 
 
 
@@ -56,7 +56,7 @@ export class CommentsPage implements OnInit {
 
 
     // BUSCAR A MINHA INFO
-    this.fser.getUserDetails().subscribe(data => {
+    this.fser.getUserDetails(this.uid).subscribe(data => {
       console.log(data)
       data.map(e => {
         this.userInfo = {

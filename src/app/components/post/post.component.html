@@ -8,7 +8,9 @@
       </ion-avatar>
     </ion-col>
     <ion-col size="7">
-      <p style="color: black;">{{username}}</p>
+      <ion-button fill="clear" (click)="GoToProfilePage()">
+        <p style="color: black;">{{username}}</p>
+      </ion-button>
     </ion-col>
     <ion-col size="3">
       <ion-button style="float: right;" fill="clear" (click)="OpenPostOptions($event)">

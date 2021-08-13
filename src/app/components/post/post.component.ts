@@ -57,7 +57,6 @@ export class PostComponent implements OnInit {
 
 
 
-
   constructor(private popCtrl: PopoverController, private router: Router, private fser: FireService) {}
 
   ngOnInit() {
@@ -149,6 +148,19 @@ export class PostComponent implements OnInit {
 
     console.log("Clicou no Save!");
     console.log("isSaved: ", this.isSaved);
+  }
+
+
+
+
+
+
+
+
+
+  GoToProfilePage(){
+    console.log("GoToProfilePage()!");
+    this.router.navigate(["/profileother/"+this.uid]);
   }
 
 
