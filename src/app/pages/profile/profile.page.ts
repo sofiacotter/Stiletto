@@ -16,13 +16,17 @@ import { SearchResults, userDetails } from 'src/app/details';
 })
 export class ProfilePage implements OnInit {
 
-  nposts: number;
-  nfollowing: number;
-  nfollowers: number;
+  nposts: number = 0;
+  nfollowing: number = 0;
+  nfollowers: number = 0;
   public userInfo: userDetails = null;
   public isLoaded1 =false;
   public isLoaded2 =false;
+  public isLoaded3 =false;
+  public isLoaded4 =false;
   public results: SearchResults[] = [];
+  public followers: string [] = [];
+  public followings: string [] = [];
   public isFollow: boolean = false;
   uid:string;
 
@@ -30,8 +34,6 @@ export class ProfilePage implements OnInit {
 
   constructor(private router: Router, private popCtrl: PopoverController,
     private fser: FireService, private authService: FireauthService) {
-    this.nfollowers = 456;
-    this.nfollowing = 36;
   }
 
 
@@ -71,6 +73,29 @@ export class ProfilePage implements OnInit {
         this.isLoaded2 = true;
         console.log("Results Found: ", this.results);
       });
+
+
+
+
+      this.fser.GetFollowers(this.uid).subscribe(data => {
+        this.followers = [];
+        data.map(e => {
+          this.followers.push(e.payload.doc.data()['uid']);
+        });
+        this.nfollowers = this.followers.length;
+        this.isLoaded3 = true;
+      });
+  
+      this.fser.GetFollowings(this.uid).subscribe(data => {
+        this.followings = [];
+        data.map(e => {
+          this.followings.push(e.payload.doc.data()['uid']);
+        });
+        this.nfollowing = this.followings.length;
+        this.isLoaded4 = true;
+      });
+
+
   }
 
 

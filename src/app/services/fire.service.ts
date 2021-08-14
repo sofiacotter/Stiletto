@@ -33,6 +33,17 @@ export class FireService {
 
 
 
+  
+  getCategories() {
+    console.log("Received: ", this.af.collection('categories'));
+    //return this.af.collection('categories');
+    return this.af.collection('categories').snapshotChanges();
+    //af.collection('items', ref => ref.where('size', '==', 'large'))
+    //return this.af.collection('categories').doc(currentUser.uid).collection('tasks').snapshotChanges();
+  }
+
+
+
 
 
   createUsername(details: userDetails){
@@ -175,9 +186,41 @@ export class FireService {
 
 
 
+  //followers --> id --> Os que seguem o id anterior
+  Follow1(otherUid: string){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('followers').doc(otherUid).collection('Followers').doc(myID).set({uid: myID});
+  }
+
+  //followings --> id --> Os que o id anterior segue
+  Follow2(otherUid: string){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('followings').doc(myID).collection('Followers').doc(otherUid).set({uid: otherUid});
+  }
+
+  //followers --> id --> Os que seguem o id anterior
+  Unfollow1(otherUid: string){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('followers').doc(otherUid).collection('Followers').doc(myID).delete();
+  }
+
+  //followings --> id --> Os que o id anterior segue
+  Unfollow2(otherUid: string){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('followings').doc(myID).collection('Followers').doc(otherUid).delete();
+  }
 
 
-  
+
+  //Os que seguem o uid
+  GetFollowers(uid: string){
+    return this.af.collection('followers').doc(uid).collection('Followers').snapshotChanges();
+  }
+
+  //Os que o uid segue
+  GetFollowings(uid: string){
+    return this.af.collection('followings').doc(uid).collection('Followers').snapshotChanges();
+  }
 
 
 
@@ -185,10 +228,7 @@ export class FireService {
 
 
 
-
-
-
-  /* Observable base API with Reactive
+   /* Observable base API with Reactive
   valueChanges() ----> Retorna um Observale. Valores da coleção e não o id dela. Vantagem:
   A conexão à database é em tempo-real, ou seja, se houver algum update, ocorre logo a
   mudança. Vários valores são enviados no tempo. Ligação permanentemente aberta e em procura
@@ -205,55 +245,6 @@ export class FireService {
   the former one only supplies us with document values but not with document id.
   */
 
-
-
-
-  getCategories() {
-    console.log("Received: ", this.af.collection('categories'));
-    //return this.af.collection('categories');
-    return this.af.collection('categories').snapshotChanges();
-    //af.collection('items', ref => ref.where('size', '==', 'large'))
-    //return this.af.collection('categories').doc(currentUser.uid).collection('tasks').snapshotChanges();
-  }
 }
 
 
-
-
-
-
-/*
-getTasks() {
-    let currentUser = firebase.auth().currentUser;
-    return this.af.collection('people').doc(currentUser.uid).collection('tasks').snapshotChanges();
-  }
-
-
-
-
-  createTask(t: Task) {
-    let currentUser = firebase.auth().currentUser;
-    return this.af.collection('people').doc(currentUser.uid).collection('tasks').add(t);
-  }
-
-
-
-
-  updateTask(TaskID: any, t: Task) {
-    let currentUser = firebase.auth().currentUser;
-
-    this.af.collection('people').doc(currentUser.uid).collection('tasks').doc(TaskID).set(t);
-    //this.af.doc('tasks/' + TaskID).update(t);
-  }
-
-
-  
-
-  deleteTask(TaskID: any) {
-    let currentUser = firebase.auth().currentUser;
-
-    this.af.collection('people').doc(currentUser.uid).collection('tasks').doc(TaskID).delete();
-    //this.af.doc('tasks/' + TaskID).delete();
-  }
-
-*/

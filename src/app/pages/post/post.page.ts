@@ -274,7 +274,7 @@ export class PostPage implements OnInit {
 
     if(this.uid === this.postInfo.uid){
         console.log("It´s the same user!");
-        this.router.navigate(["/tabs/profile"]);
+        //this.router.navigate(["/tabs/profile"]);
     }
     else{
         console.log("It´s a different user! "+ this.postInfo.uid);

@@ -15,22 +15,25 @@ import { SearchResults, userDetails } from 'src/app/details';
 export class ProfileotherPage implements OnInit {
 
   uid: string;
-  nposts: number;
-  nfollowing: number;
-  nfollowers: number;
+  myUid: string;
+  nposts: number = 0;
+  nfollowing: number = 0;
+  nfollowers: number = 0;
   public isLoaded1 =false;
   public isLoaded2 =false;
+  public isLoaded3 =false;
+  public isLoaded4 =false;
   public results: SearchResults[] = [];
   public isFollow: boolean = false;
   public userInfo: userDetails = null;
+  public followers: string [] = [];
+  public followings: string [] = [];
 
 
 
   constructor(private router: Router, private popCtrl: PopoverController,
     private fser: FireService, private location: Location,  
     private activatedRoute: ActivatedRoute) {
-    this.nfollowers = 456;
-    this.nfollowing = 36;
 
     
   }
@@ -41,6 +44,7 @@ export class ProfileotherPage implements OnInit {
   ngOnInit() {
 
     this.uid = this.activatedRoute.snapshot.paramMap.get('uid'); 
+    this.myUid = this.fser.getUid();
 
 
 
@@ -57,7 +61,6 @@ export class ProfileotherPage implements OnInit {
         };
       });
       this.isLoaded1 = true;
-      console.log("User Info: ", this.userInfo);
     });
 
 
@@ -80,9 +83,50 @@ export class ProfileotherPage implements OnInit {
       });
       this.nposts = this.results.length;
       this.isLoaded2 = true;
-      console.log("Results Found: ", this.results);
     });
+
+
+
+    this.fser.GetFollowers(this.uid).subscribe(data => {
+      this.followers = [];
+      data.map(e => {
+        this.followers.push(e.payload.doc.data()['uid']);
+      });
+      this.nfollowers = this.followers.length;
+      this.isLoaded3 = true;
+      if(this.followers.includes(this.myUid)){
+        this.isFollow = true;
+      }
+      else{
+        this.isFollow = false;
+      }
+    });
+
+    this.fser.GetFollowings(this.uid).subscribe(data => {
+      this.followings = [];
+      data.map(e => {
+        this.followings.push(e.payload.doc.data()['uid']);
+      });
+      this.nfollowing = this.followings.length;
+      this.isLoaded4 = true;
+    });
+
+
+
+
+
+
+
+
   }
+
+
+
+
+
+
+
+
 
 
 
@@ -94,9 +138,14 @@ export class ProfileotherPage implements OnInit {
       component: SettingspopComponent,
       event: ev
     });
-
     return await popover.present();
   }
+
+
+
+
+
+
 
 
   OpenPost(idpost: string){
@@ -106,15 +155,51 @@ export class ProfileotherPage implements OnInit {
 
 
 
-  Follow(){
+
+
+
+  ClickOnFollow(){
     if(!this.isFollow) {
-      this.isFollow = true;
+      this.Follow();
     }
     else {
-      this.isFollow = false;
+      this.Unfollow();
     }
     console.log("Follow: ", this.isFollow);
   }
+
+
+
+  Follow(){
+    this.isFollow = true;
+    this.fser.Follow1(this.uid).then( res => {
+    }, err => {
+      console.log("ERRO AO FOLLOW 1!");
+    })
+    this.fser.Follow2(this.uid).then( res => {
+    }, err => {
+      console.log("ERRO AO FOLLOW 2!");
+    });
+  }
+
+
+  Unfollow(){
+    this.isFollow = false;
+    this.fser.Unfollow1(this.uid).then( res => {
+    }, err => {
+      console.log("ERRO AO UNFOLLOW 1!");
+    })
+    this.fser.Unfollow2(this.uid).then( res => {
+    }, err => {
+      console.log("ERRO AO UNFOLLOW 2!");
+    });
+  }
+
+
+
+
+
+
 
 
 
