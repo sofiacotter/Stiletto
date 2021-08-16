@@ -183,6 +183,9 @@ export class PostPage implements OnInit {
 
 
 
+
+  
+
   Like(){
     if (this.isLiked){
       this.fser.Deslike(this.idpost).then( res => {
