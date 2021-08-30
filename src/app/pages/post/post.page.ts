@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
 import { PopoverController } from '@ionic/angular';
-import { CommentsResults, PostInfo, userDetails } from 'src/app/details';
+import { Comment, PostInfo, userDetails } from 'src/app/details';
 import { FireService } from 'src/app/services/fire.service';
 
 
@@ -15,25 +15,14 @@ import { FireService } from 'src/app/services/fire.service';
 export class PostPage implements OnInit {
 
   idpost: string; 
-  nsaved: number = 0;
-  nliked: number = 0;
-  ncommented: number = 2;
-  public isLoaded1 = false;
-  public isLoaded2 = false;
-  public isLoaded3 = false;
-  public isLoaded4 = false;
-
+  public isLoaded = false;
   public isLiked: boolean;
   public isSaved: boolean;
-  usernamesLiked: any[];
-  usernamesSaves: any[];
-  public comments: CommentsResults[] = [];
+  public commentsList: Comment[] = [];
   public userInfo: userDetails = null;
-  allSaves: any;
-  uid: string;
-
-  isUsernameLoaded: boolean = false;
+  myUid: string;
   postInfo: PostInfo;
+  public dateString: string;
 
   //this.router.navigate(["/tabs/search"]);
   constructor(private router: Router, private location: Location, 
@@ -45,17 +34,20 @@ export class PostPage implements OnInit {
       this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
   }
 
-  ngOnInit() {
 
-    this.uid = this.fser.getUid();
-    console.log("UID: ", this.uid);
+
+
+  ngOnInit() {
+    this.myUid = this.fser.getUid();
+    console.log("My UID: ", this.myUid);
 
 
     /*
-    BUSCAR IMAGEM, USERNAME, DESCRIÇÃO, HASHTAGS, FOTO DE PERFIL E DATA/HORA
+    BUSCAR POST + COMENTÁRIOS
     */
     this.fser.getPost(this.idpost).subscribe(data => {
       data.map(e => {
+        console.log("GetPosts() data raw ----> ", e.payload.doc.data());
         this.postInfo = {
           uid: e.payload.doc.data()['uid'],
           idpost: e.payload.doc.id,
@@ -64,86 +56,40 @@ export class PostPage implements OnInit {
           profilephoto: e.payload.doc.data()['profilephoto'],
           description: e.payload.doc.data()['description'],
           hashtags: e.payload.doc.data()['hashtags'],
-          datetime: e.payload.doc.data()['datetime']
+          datetime: e.payload.doc.data()['datetime'],
+          likes: e.payload.doc.data()['likes'],
+          saves: e.payload.doc.data()['saves'],
+          comments: null
         };
       });
-      this.isLoaded1 = true;
-      console.log("Post Info: ", this.postInfo);
-    });
-
-
-
-
-
-    /*
-    BUSCAR LISTA DE USERNAMES QUE DEU LIKE
-    */
-    this.fser.getUsersLikes(this.idpost).subscribe(data =>{
-      this.usernamesLiked = data.map(e => {
-        return  e.payload.doc.data()['uid']
-      })
-      this.isLiked = this.usernamesLiked.includes(this.uid);
-      this.nliked = this.usernamesLiked.length;
-      this.isLoaded2 = true;
-      console.log("this.usernamesLiked: ", this.usernamesLiked);
-      console.log("Likes: ", this.nliked);
-    });
-
-
-
-
-    /*retorna lista de uids que guardaram este post */
-    this.fser.getSavesByPost(this.idpost).subscribe(data =>{
-      this.usernamesSaves = data.map(e => {
-        return  e.payload.doc.data()['uid']
-      })
-      this.isSaved = this.usernamesSaves.includes(this.uid);
-      this.nsaved = this.usernamesSaves.length;
-      this.isLoaded3 = true;
-      console.log("this.usernamesSaves: ", this.usernamesSaves);
-      console.log("Saved: ", this.nsaved);
-    });
-
-
-
-
-
-
-
-
-
-    // BUSCAR CONTAGEM DE COMENTÁRIOS
-    this.fser.getComments(this.idpost).subscribe(data => {
-      console.log(data)
-      this.comments = [];
-      data.map(e => {
-        this.comments.push({
-          username: e.payload.doc.data()['username'],
-          imagepath: e.payload.doc.data()['imagepath'],
-          comment: e.payload.doc.data()['comment'],
-          datetime: e.payload.doc.data()['datetime']
+      this.fser.getCommentsInPost(this.idpost).subscribe(data => {
+        console.log(data)
+        this.commentsList = [];
+        data.map(e => {
+          this.commentsList.push({
+            uid: e.payload.doc.data()['uid'],
+            username: e.payload.doc.data()['username'],
+            imagepath: e.payload.doc.data()['imagepath'],
+            comment: e.payload.doc.data()['comment'],
+            datetime: e.payload.doc.data()['datetime']
+          });
         });
+
+        let ts = this.postInfo.datetime.toDate();
+        let date = `${ts.getDate()}/${ts.getMonth()}/${ts.getFullYear()}`; 
+        let time = `${ts.getHours()}:${ts.getMinutes()}`; 
+        this.dateString = date +  " " + time;
+        this.isLoaded = true;
+        console.log("Post Info: ", this.postInfo);
+        console.log("Comments List: ", this.commentsList);
+        // Definir se há LIKE ou SAVE neste post
+        if(this.postInfo.likes.includes(this.myUid)) this.isLiked = true;
+        if(!this.postInfo.likes.includes(this.myUid)) this.isLiked = false;
+
+        if(this.postInfo.saves.includes(this.myUid)) this.isSaved = true;
+        if(!this.postInfo.saves.includes(this.myUid)) this.isSaved = false;
       });
-      this.ncommented = 2 + this.comments.length;
-      this.isLoaded4 = true;
-      console.log("Comments made: ", this.comments);
     });
-
-
-
-    this.fser.getUserDetails(this.uid).subscribe(data => {
-      data.map(e => {
-        this.userInfo = {
-
-          uid: e.payload.doc.data()['uid'],
-          email: e.payload.doc.data()['email'],
-          username: e.payload.doc.data()['username'],
-          profilephoto: e.payload.doc.data()['profilephoto']
-        };
-      });
-      this.isUsernameLoaded = true;  
-    });
-
   }
 
 
@@ -172,12 +118,10 @@ export class PostPage implements OnInit {
 
   async OpenPostOptions(ev: any){
     console.log("Here are your options...");
-
     const popover = await this.popCtrl.create({
       component: PostpopComponent,
       event: ev
-      });
-      
+      });  
       return await popover.present();
   }
 
@@ -188,20 +132,19 @@ export class PostPage implements OnInit {
 
   Like(){
     if (this.isLiked){
-      this.fser.Deslike(this.idpost).then( res => {
+      this.fser.Deslike(this.idpost, this.postInfo.likes).then( res => {
         this.isLiked = false;
       }, err => {
         console.log("ERRO AO DAR LIKE!");
       })
     } 
     else{
-      this.fser.Like(this.idpost).then( res => {
+      this.fser.Like(this.idpost, this.postInfo.likes).then( res => {
         this.isLiked = true;
       }, err => {
         console.log("ERRO AO DAR LIKE!");
       })
     }
-    console.log("Clicou no Like!");
     console.log("isLiked: ", this.isLiked);
   }
 
@@ -213,13 +156,12 @@ export class PostPage implements OnInit {
 
 
   Save(){
-
     if (this.isSaved){
-      this.fser.UnsavePostInUser(this.idpost).then( res => {
+      this.fser.UnsaveUserInPost(this.idpost, this.postInfo.saves).then( res => {
       }, err => {
         console.log("ERRO AO DAR UNSAVE 1!");
       })
-      this.fser.UnsaveUserInPost(this.idpost).then( res => {
+      this.fser.Unsave(this.idpost).then( res => {
       }, err => {
         console.log("ERRO AO DAR UNSAVE 2!");
       })
@@ -233,22 +175,16 @@ export class PostPage implements OnInit {
 
 
     else{
-      this.fser.SavePostInUser(this.idpost, this.postInfo.imagepath).then( res => {
+      this.fser.Save(this.idpost, this.postInfo.imagepath).then( res => {
       }, err => {
         console.log("ERRO AO DAR SAVE 1!");
       })
-      this.fser.SaveUserInPost(this.idpost).then( res => {
+      this.fser.SaveUserInPost(this.idpost, this.postInfo.saves).then( res => {
       }, err => {
         console.log("ERRO AO DAR SAVE 2!");
       })
       this.isSaved = true;
     }
-
-
-
-
-
-    console.log("Clicou no Save!");
     console.log("isSaved: ", this.isSaved);
   }
 
@@ -273,16 +209,7 @@ export class PostPage implements OnInit {
 
 
   GoToProfilePage(){
-    console.log("GoToProfilePage()!");
-
-    if(this.uid === this.postInfo.uid){
-        console.log("It´s the same user!");
-        //this.router.navigate(["/tabs/profile"]);
-    }
-    else{
-        console.log("It´s a different user! "+ this.postInfo.uid);
-        this.router.navigate(["/profileother/"+this.postInfo.uid]);
-    }
+    console.log("Clicou em GoToProfilePage()!");
+    this.router.navigate(["/profileother/"+this.postInfo.uid]);
   }
-
 }

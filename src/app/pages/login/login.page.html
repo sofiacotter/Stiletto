@@ -18,7 +18,7 @@
 
     <div class="validation-errors">
       <ng-container *ngFor="let validation of validation_messages.email">
-        <div class="error-message" *ngIf="validations_form.get('email').hasError(validation.type) && 
+        <div class="error-message ion-margin-horizontal" *ngIf="validations_form.get('email').hasError(validation.type) && 
           (validations_form.get('email').dirty || validations_form.get('email').touched)">
           {{ validation.message }}
         </div>
@@ -32,15 +32,15 @@
 
     <div class="validation-errors">
       <ng-container *ngFor="let validation of validation_messages.password">
-        <div class="error-message" *ngIf="validations_form.get('password').hasError(validation.type) && 
+        <div class="error-message ion-margin-horizontal" *ngIf="validations_form.get('password').hasError(validation.type) && 
           (validations_form.get('password').dirty || validations_form.get('password').touched)">
           {{ validation.message }}
         </div>
       </ng-container>
     </div>
 
-    <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!validations_form.valid">Log In</ion-button>
-    <label class="error-message">{{errorMessage}}</label>
+    <ion-button class="submit-btn ion-margin" expand="block" type="submit" [disabled]="!validations_form.valid">Log In</ion-button>
+    <label class="error-message ion-margin-horizontal">{{errorMessage}}</label>
   </form>
 
   <p class="textbottom">

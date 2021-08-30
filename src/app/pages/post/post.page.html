@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="isLoaded1 && isLoaded2 && isLoaded3 && isLoaded4 && isUsernameLoaded">
+  <ion-card *ngIf="isLoaded">
 
     <!-- Header: Avatar + Username -->
     <ion-row id='postHeader'>
@@ -50,21 +50,21 @@
         <ion-col size="3" class="icons" (click)="OpenComments()">
           <ion-button fill="clear">
             <ion-icon style="padding: 3px;" ion-align-self-center name="pencil-outline"></ion-icon>
-            <ion-label ion-align-self-center>{{ncommented}}</ion-label>
+            <ion-label ion-align-self-center>{{2+commentsList.length}}</ion-label>
           </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
             <ion-button fill="clear" (click)="Like()">
               <ion-icon style="padding: 3px;" ion-align-self-center name="heart-outline" *ngIf="!isLiked"></ion-icon>
               <ion-icon style="padding: 3px;" ion-align-self-center name="heart" *ngIf="isLiked"></ion-icon>
-              <ion-label ion-align-self-center>{{nliked}}</ion-label>
+              <ion-label ion-align-self-center>{{postInfo.likes.length}}</ion-label>
             </ion-button>
         </ion-col>
         <ion-col size="3" class="icons">
             <ion-button fill="clear" (click)="Save()">
               <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark-outline" *ngIf="!isSaved"></ion-icon>
               <ion-icon style="padding: 3px;" ion-align-self-center name="bookmark" *ngIf="isSaved"></ion-icon>
-              <ion-label ion-align-self-center>{{nsaved}}</ion-label>
+              <ion-label ion-align-self-center>{{postInfo.saves.length}}</ion-label>
             </ion-button>
         </ion-col>
       </ion-row>
@@ -88,7 +88,7 @@
 
     <!-- Data de Publicação -->
     <ion-row class="datetimebox">
-      <p style="font-size: 14px">{{postInfo.datetime}}</p>
+      <p style="font-size: 14px">{{dateString}}</p>
     </ion-row>
 
 

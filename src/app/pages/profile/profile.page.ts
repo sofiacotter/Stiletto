@@ -17,17 +17,10 @@ import { SearchResults, userDetails } from 'src/app/details';
 export class ProfilePage implements OnInit {
 
   nposts: number = 0;
-  nfollowing: number = 0;
-  nfollowers: number = 0;
   public userInfo: userDetails = null;
   public isLoaded1 =false;
   public isLoaded2 =false;
-  public isLoaded3 =false;
-  public isLoaded4 =false;
   public results: SearchResults[] = [];
-  public followers: string [] = [];
-  public followings: string [] = [];
-  public isFollow: boolean = false;
   uid:string;
 
 
@@ -48,11 +41,12 @@ export class ProfilePage implements OnInit {
       this.fser.getUserDetails(this.uid).subscribe(data => {
         data.map(e => {
           this.userInfo = {
-
             uid: e.payload.doc.data()['uid'],
             email: e.payload.doc.data()['email'],
             username: e.payload.doc.data()['username'],
-            profilephoto: e.payload.doc.data()['profilephoto']
+            profilephoto: e.payload.doc.data()['profilephoto'],
+            followers: e.payload.doc.data()['followers'],
+            following: e.payload.doc.data()['following']
           };
         });
         this.isLoaded1 = true;
@@ -73,28 +67,6 @@ export class ProfilePage implements OnInit {
         this.isLoaded2 = true;
         console.log("Results Found: ", this.results);
       });
-
-
-
-
-      this.fser.GetFollowers(this.uid).subscribe(data => {
-        this.followers = [];
-        data.map(e => {
-          this.followers.push(e.payload.doc.data()['uid']);
-        });
-        this.nfollowers = this.followers.length;
-        this.isLoaded3 = true;
-      });
-  
-      this.fser.GetFollowings(this.uid).subscribe(data => {
-        this.followings = [];
-        data.map(e => {
-          this.followings.push(e.payload.doc.data()['uid']);
-        });
-        this.nfollowing = this.followings.length;
-        this.isLoaded4 = true;
-      });
-
 
   }
 
@@ -117,15 +89,4 @@ export class ProfilePage implements OnInit {
     this.router.navigate(["/post/"+idpost]);
   }
 
-
-
-  Follow(){
-    if(!this.isFollow) {
-      this.isFollow = true;
-    }
-    else {
-      this.isFollow = false;
-    }
-    console.log("Follow: ", this.isFollow);
-  }
 }

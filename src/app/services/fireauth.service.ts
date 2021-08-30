@@ -14,7 +14,7 @@ import { Injectable } from '@angular/core';
 export class FireauthService {
   constructor(
     private firebaseService: FireService,
-    public afAuth: AngularFireAuth
+    public afAuth: AngularFireAuth,
   ) { }
 
 

@@ -31,7 +31,7 @@ export class SavedPage implements OnInit {
 
   GetSavedPosts(){
 
-    this.fser.getSavesByUser().subscribe(data => {
+    this.fser.GetSavesByUser().subscribe(data => {
       console.log(data)
       this.results = [];
       data.map(e => {

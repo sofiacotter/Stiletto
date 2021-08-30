@@ -12,7 +12,7 @@ export class FireService {
   private snapshotChangesSubscription: any;
   
   constructor(public af: AngularFirestore) {
-
+   
    }
 
 
@@ -47,10 +47,8 @@ export class FireService {
 
 
   createUsername(details: userDetails){
-
     let currentUser = firebase.auth().currentUser;
     details = {...details, uid:currentUser.uid}
-
     return this.af.collection('userDetails').doc(currentUser.uid).set(details);
   }
 
@@ -83,52 +81,66 @@ export class FireService {
   getPost(idpost: string){
     console.log("getPost() --> ", this.af.collection('posts', ref => ref.where('idpost', '==', idpost)).snapshotChanges());
     return this.af.collection('posts', ref => ref.where('idpost', '==', idpost)).snapshotChanges();
-
   }
 
 
+  loadMorePosts(users: string[], lastPostShowedDate:Date){
+    var today = lastPostShowedDate;
+    console.log(" lastPostShowedDate: ",  lastPostShowedDate);
+    var lastWeek = new Date(today.getFullYear(), today.getMonth(), lastPostShowedDate.getDate() - 7);
+    return this.af.collection('posts', ref => {
+      return ref
+             .where('uid', 'in', users)
+             .where('datetime', '<', today)
+             .where('datetime', '>', lastWeek).orderBy("datetime", "desc").limit(5);
+   }).get();
+  }
 
-  getUsersLikes(idpost: string){
-    console.log("getUsersLikes() --> ", this.af.collection('likes').doc(idpost).collection('users').snapshotChanges());
-    return this.af.collection('likes').doc(idpost).collection('users').snapshotChanges();
+  getFirstTimelinePost(users: string[]){
+    var today = new Date();
+    return this.af.collection('posts', ref => {
+      return ref
+             .where('uid', 'in', users)
+             .where('datetime', '<', today).orderBy("datetime", "desc").limit(1);
+   }).get();
   }
 
 
   
-  getSavesByPost(idpost: string){
-    console.log("getSavesByPost() --> ", this.af.collection('savesByPost').doc(idpost).collection('users').snapshotChanges());
-    return this.af.collection('savesByPost').doc(idpost).collection('users').snapshotChanges();
-
-  }
-
-
-
-  getSavesByUser(){
-    let uid = firebase.auth().currentUser.uid;
-    console.log("getSavesByUser() --> ", this.af.collection('saves').doc(uid).collection('posts').snapshotChanges());
-    return this.af.collection('saves').doc(uid).collection('posts').snapshotChanges();
-  }
 
 
 
 
-  Like(idpost:string){
 
+
+
+  /* MÉTODOS DE LIKE */
+
+  Like(idpost:string, likesList: string[]){
     let userID = firebase.auth().currentUser.uid;
-    return this.af.collection('likes').doc(idpost).collection('users').doc(userID).set({uid: userID});
+    return this.af.collection('posts').doc(idpost).update({
+      likes: [...likesList, userID]
+    });
   }
 
-  Deslike(idpost:string){
-
+  Deslike(idpost:string, likesList: string[]){
     let userID = firebase.auth().currentUser.uid;
-    return this.af.collection('likes').doc(idpost).collection('users').doc(userID).delete();
+    //index = likesList.indexOf(userID);
+    return this.af.collection('posts').doc(idpost).update({
+      likes: likesList.filter(function(uid) { return uid != userID; })
+    });
   }
 
 
 
+  /* MÉTODOS DE SAVE */
 
+  GetSavesByUser(){
+    let userID = firebase.auth().currentUser.uid;
+    return this.af.collection('saves').doc(userID).collection('posts').snapshotChanges();
+  }
 
-  SavePostInUser(idpost:string, filename:string){
+  Save(idpost:string, filename:string){
     let userID = firebase.auth().currentUser.uid;
     return this.af.collection('saves').doc(userID).collection('posts').doc(idpost).set({
       uid: userID,
@@ -136,34 +148,31 @@ export class FireService {
     });
   }
 
-  SaveUserInPost(idpost: string){
-    let userID = firebase.auth().currentUser.uid;
-    return this.af.collection('savesByPost').doc(idpost).collection('users').doc(userID).set({uid: userID});
-  }
-
-
-
-
-
-  UnsaveUserInPost(idpost:string){
-    let userID = firebase.auth().currentUser.uid;
-    return this.af.collection('savesByPost').doc(idpost).collection('users').doc(userID).delete();
-  }
-
-
-  UnsavePostInUser(idpost: string){
+  Unsave(idpost: string){
     let userID = firebase.auth().currentUser.uid;
     return this.af.collection('saves').doc(userID).collection('posts').doc(idpost).delete();
   }
 
-
-
-  // Usar para obter a contagem de comentários
-  getComments(idpost: string){
+  SaveUserInPost(idpost: string, savesList: string[]){
     let userID = firebase.auth().currentUser.uid;
-    return this.af.collection('comments').doc(idpost).collection('commentsInPost').snapshotChanges();
+    return this.af.collection('posts').doc(idpost).update({
+      saves: [...savesList, userID]
+    });
   }
 
+  UnsaveUserInPost(idpost:string, savesList: string[]){
+    let userID = firebase.auth().currentUser.uid;
+    let index = savesList.indexOf(userID);
+    return this.af.collection('posts').doc(idpost).update({
+      saves: savesList.filter(function(uid) { return uid != userID; })
+    });
+  }
+
+
+
+
+
+  /* MÉTODOS DE COMENTÁRIOS */
 
   WriteComment(idpost: string, username1: string, imagepath1: string, comment1: string){
     const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
@@ -171,11 +180,58 @@ export class FireService {
     const time = datetime.slice(11, 19);
     const publicationDate = hour + " " + time;
     console.log("Data de Publicação: ", publicationDate);
-    return this.af.collection('comments').doc(idpost).collection('commentsInPost').add({
+    return this.af.collection('posts').doc(idpost).collection('Comments').add({
+      uid: firebase.auth().currentUser.uid,
       username: username1,
       imagepath: imagepath1,
       datetime: publicationDate,
       comment: comment1
+    });
+  }
+
+  getCommentsInPost(idpost: string){
+    return this.af.collection('posts').doc(idpost).collection("Comments").snapshotChanges();
+  }
+
+
+
+
+
+
+
+
+  Follow1(otherUid: string, followingList: string[]){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(myID).update({
+      following: [...followingList, otherUid]
+    });
+  }
+
+
+  Follow2(otherUid: string, followersList: string[]){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(otherUid).update({
+      followers: [...followersList, myID]
+    });
+  }
+
+  /*
+  return this.af.collection('posts').doc(idpost).update({
+      saves: savesList.filter(function(uid) { return uid != userID; })
+    });
+  */
+  Unfollow1(otherUid: string, followingList: string[]){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(myID).update({
+      following: followingList.filter(function(uid) { return uid != otherUid; })
+    });
+  }
+
+  //followings --> id --> Os que o id anterior segue
+  Unfollow2(otherUid: string, followersList: string[]){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(otherUid).update({
+      followers: followersList.filter(function(uid) { return uid != myID; })
     });
   }
 
@@ -185,41 +241,27 @@ export class FireService {
 
 
 
+  /* PUBLICAR POST */
 
-  //followers --> id --> Os que seguem o id anterior
-  Follow1(otherUid: string){
-    let myID = firebase.auth().currentUser.uid;
-    return this.af.collection('followers').doc(otherUid).collection('Followers').doc(myID).set({uid: myID});
-  }
-
-  //followings --> id --> Os que o id anterior segue
-  Follow2(otherUid: string){
-    let myID = firebase.auth().currentUser.uid;
-    return this.af.collection('followings').doc(myID).collection('Followers').doc(otherUid).set({uid: otherUid});
-  }
-
-  //followers --> id --> Os que seguem o id anterior
-  Unfollow1(otherUid: string){
-    let myID = firebase.auth().currentUser.uid;
-    return this.af.collection('followers').doc(otherUid).collection('Followers').doc(myID).delete();
-  }
-
-  //followings --> id --> Os que o id anterior segue
-  Unfollow2(otherUid: string){
-    let myID = firebase.auth().currentUser.uid;
-    return this.af.collection('followings').doc(myID).collection('Followers').doc(otherUid).delete();
-  }
-
-
-
-  //Os que seguem o uid
-  GetFollowers(uid: string){
-    return this.af.collection('followers').doc(uid).collection('Followers').snapshotChanges();
-  }
-
-  //Os que o uid segue
-  GetFollowings(uid: string){
-    return this.af.collection('followings').doc(uid).collection('Followers').snapshotChanges();
+  Publish(usern: string, profilep: string, hash: string, desc: string, filename: string){
+    let userID = firebase.auth().currentUser.uid;
+    const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
+    const hour = datetime.slice(0, 10);
+    const time = datetime.slice(11, 19);
+    const publicationDate = hour + " " + time;
+    const idpostGenerated = this.af.createId();
+    return this.af.collection('saves').doc(userID).collection('posts').doc(idpostGenerated).set({
+      idpost: idpostGenerated,
+      uid: userID,
+      imagepath: filename,
+      datetime: publicationDate,
+      hashtags: hash,
+      description: desc,
+      likes: [],
+      saves: [],
+      profilephoto: profilep,
+      username: usern
+    });
   }
 
 

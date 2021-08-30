@@ -22,12 +22,12 @@ export class SettingspopComponent implements OnInit {
   Logout(){
     console.log("Logout!");
     this.authService.doLogout()
-    // Se a função doLogout() funcionar, navega à página de login, caso contrário,
-    // só faz um print(), não efetua o Logout.
       .then(res => {
+        console.log("Unsubscribe foi bem sucedido!");
         this.router.navigate(["/login"]);
       }, err => {
         console.log(err);
+        this.router.navigate(["/login"]);
       })  
   }
 

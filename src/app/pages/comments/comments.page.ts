@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from "@angular/common";
 import { FireService } from 'src/app/services/fire.service';
-import { CommentsResults, userDetails } from 'src/app/details';
+import { Comment, userDetails } from 'src/app/details';
 import { stringify } from '@angular/compiler/src/util';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
@@ -16,20 +16,20 @@ import { ToastController } from '@ionic/angular';
 })
 export class CommentsPage implements OnInit {
 
-  uid:string;
+  myUid:string;
   idpost: any;
   public userInfo: userDetails = null;
   public isLoaded1 = false;
   public isLoaded2 = false;
-  public results: CommentsResults[] = [];
+  public commentList: Comment[] = [];
   validations_form: FormGroup;
 
   //this.router.navigate(["/tabs/search"]);
-  constructor(private router: ActivatedRoute, private location: Location, 
-    private fser: FireService, private formBuilder: FormBuilder,
-    public toastController: ToastController) {
+  constructor(private router: Router, private activatedRouter: ActivatedRoute, 
+    private location: Location, private fser: FireService, 
+    private formBuilder: FormBuilder, public toastController: ToastController) {
 
-    this.idpost = this.router.params.subscribe(params => {
+    this.idpost = this.activatedRouter.params.subscribe(params => {
       this.idpost = params['id']; 
       console.log("Id: ", this.idpost);
     });
@@ -40,7 +40,7 @@ export class CommentsPage implements OnInit {
 
 
   ngOnInit() {
-    this.uid = this.fser.getUid();
+    this.myUid = this.fser.getUid();
 
 
 
@@ -56,15 +56,16 @@ export class CommentsPage implements OnInit {
 
 
     // BUSCAR A MINHA INFO
-    this.fser.getUserDetails(this.uid).subscribe(data => {
+    this.fser.getUserDetails(this.myUid).subscribe(data => {
       console.log(data)
       data.map(e => {
         this.userInfo = {
-
           uid: e.payload.doc.data()['uid'],
           email: e.payload.doc.data()['email'],
           username: e.payload.doc.data()['username'],
-          profilephoto: e.payload.doc.data()['profilephoto']
+          profilephoto: e.payload.doc.data()['profilephoto'],
+          followers: e.payload.doc.data()['followers'],
+          following: e.payload.doc.data()['following']
         };
       });
       this.isLoaded1 = true;
@@ -78,11 +79,12 @@ export class CommentsPage implements OnInit {
 
 
     // BUSCAR COMENTÁRIOS JÁ FEITOS
-    this.fser.getComments(this.idpost).subscribe(data => {
+    this.fser.getCommentsInPost(this.idpost).subscribe(data => {
       console.log(data)
-      this.results = [];
+      this.commentList = [];
       data.map(e => {
-        this.results.push({
+        this.commentList.push({
+          uid: e.payload.doc.data()['uid'],
           username: e.payload.doc.data()['username'],
           imagepath: e.payload.doc.data()['imagepath'],
           comment: e.payload.doc.data()['comment'],
@@ -90,7 +92,7 @@ export class CommentsPage implements OnInit {
         });
       });
       this.isLoaded2 = true;
-      console.log("Comments made: ", this.results);
+      console.log("Comments made: ", this.commentList);
     });
   }
 
@@ -121,7 +123,6 @@ export class CommentsPage implements OnInit {
           position: 'top'
         });
         toast.present();
-
         this.validations_form.controls['comment'].reset();
 
     }, async err => {
@@ -132,9 +133,22 @@ export class CommentsPage implements OnInit {
         position: 'top'
       });
       toast.present();
-
       console.log("ERRO AO COMENTAR!");
     })
+  }
+
+
+
+  GoToProfilePage(uid: string){
+    console.log("Clicou em GoToProfilePage()!");
+    if(this.myUid === uid){
+        console.log("It´s the same user!");
+        //this.router.navigate(["/tabs/profile"]);
+    }
+    else{
+        console.log("It´s a different user! "+ uid);
+        this.router.navigate(["/profileother/"+uid]);
+    }
   }
 
 }

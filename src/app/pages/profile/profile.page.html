@@ -10,7 +10,7 @@
 
 <ion-content>
 
-  <div id="top" *ngIf="isLoaded1 && isLoaded2 && isLoaded3 && isLoaded4">
+  <div id="top" *ngIf="isLoaded1 && isLoaded2">
 
 
     <div id="profilephotodiv">
@@ -28,13 +28,13 @@
           </ion-col>
           <ion-col>
             <p class="text">
-              <strong>{{nfollowers}}</strong><br>
+              <strong>{{userInfo.followers.length}}</strong><br>
               <em>followers</em>
             </p>
           </ion-col>
           <ion-col>
             <p class="text">
-              <strong>{{nfollowing}}</strong><br>
+              <strong>{{userInfo.following.length}}</strong><br>
               <em>following</em>
             </p>
           </ion-col>

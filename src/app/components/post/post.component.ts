@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { PostpopComponent } from '../postpop/postpop.component';
 import { Router } from '@angular/router';
-import { CommentsResults, PostInfo } from 'src/app/details';
+import { Comment} from 'src/app/details';
 import { FireService } from 'src/app/services/fire.service';
 
 
@@ -41,26 +41,40 @@ export class PostComponent implements OnInit {
   datetime: string;
 
   @Input()
-  ncommented: number;
+  saves: string[];
 
   @Input()
-  nlikes: number;
+  likes: string[];
 
   @Input()
-  nsaves: number;
+  comments: Comment[];
 
-  @Input()
+  myUid: string;
   isSaved: boolean;
-
-  @Input()
   isLiked: boolean;
+  nsaves: number;
+  nlikes: number;
+  
+ 
+ 
+
+
+
+
 
 
 
   constructor(private popCtrl: PopoverController, private router: Router, private fser: FireService) {}
 
+
   ngOnInit() {
-    this.ncommented += 2;
+    this.myUid = this.fser.getUid();
+    this.nsaves = this.saves.length;
+    this.nlikes = this.likes.length;
+    if(this.likes.includes(this.myUid)) this.isLiked = true;
+    if(!this.likes.includes(this.myUid)) this.isLiked = false;
+    if(this.saves.includes(this.myUid)) this.isSaved = true;
+    if(!this.saves.includes(this.myUid)) this.isSaved = false;
   }
 
 
@@ -71,14 +85,12 @@ export class PostComponent implements OnInit {
       component: PostpopComponent,
       event: ev
       });
-      
       return await popover.present();
   }
 
 
   OpenComments(){
     this.router.navigate(["/comments",{id: this.idpost}]);
-    
   }
 
 
@@ -86,21 +98,25 @@ export class PostComponent implements OnInit {
 
   Like(){
     if (this.isLiked){
-      this.fser.Deslike(this.idpost).then( res => {
+      this.fser.Deslike(this.idpost, this.likes).then( res => {
         this.isLiked = false;
+        this.nlikes -= 1;
+        console.log("isLiked: ", this.isLiked);
+
       }, err => {
         console.log("ERRO AO DAR LIKE!");
       })
     } 
     else{
-      this.fser.Like(this.idpost).then( res => {
+      this.fser.Like(this.idpost, this.likes).then( res => {
         this.isLiked = true;
+        this.nlikes += 1;
+        console.log("isLiked: ", this.isLiked);
+
       }, err => {
         console.log("ERRO AO DAR LIKE!");
       })
     }
-    console.log("Clicou no Like!");
-    console.log("isLiked: ", this.isLiked);
   }
 
 
@@ -111,42 +127,31 @@ export class PostComponent implements OnInit {
 
 
   Save(){
-
     if (this.isSaved){
-      this.fser.UnsavePostInUser(this.idpost).then( res => {
+      this.fser.UnsaveUserInPost(this.idpost, this.saves).then( res => {
       }, err => {
         console.log("ERRO AO DAR UNSAVE 1!");
       })
-      this.fser.UnsaveUserInPost(this.idpost).then( res => {
+      this.fser.Unsave(this.idpost).then( res => {
       }, err => {
         console.log("ERRO AO DAR UNSAVE 2!");
       })
+      this.nsaves -= 1;
       this.isSaved = false;
     } 
 
-
-
-
-
-
-
     else{
-      this.fser.SavePostInUser(this.idpost, this.imagepath).then( res => {
+      this.fser.Save(this.idpost, this.imagepath).then( res => {
       }, err => {
         console.log("ERRO AO DAR SAVE 1!");
       })
-      this.fser.SaveUserInPost(this.idpost).then( res => {
+      this.fser.SaveUserInPost(this.idpost, this.saves).then( res => {
       }, err => {
         console.log("ERRO AO DAR SAVE 2!");
       })
+      this.nsaves += 1;
       this.isSaved = true;
     }
-
-
-
-
-
-    console.log("Clicou no Save!");
     console.log("isSaved: ", this.isSaved);
   }
 

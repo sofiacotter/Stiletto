@@ -11,7 +11,9 @@ export class DataService {
     uid: '',
     email: '', 
     username: '',
-    profilephoto: ''
+    profilephoto: '',
+    followers: [],
+    following: []
   };
 
   private messageSource = new BehaviorSubject(this.user);

@@ -34,7 +34,6 @@
             <p><b>aaron_man: </b> The way you combined the items was really nice. Keep up :) </p>
           </ion-col>
         </ion-row>
-
         <ion-row>
           <ion-col size="2">
           </ion-col>
@@ -65,11 +64,9 @@
               <img src="../assets/images/profilepics/profile2.jpeg">
             </ion-avatar>
           </ion-col>
-
           <ion-col size="10">
             <p><b>bellafiori: </b>You are so talented to choose outfits! I was literally asking myself yesterday how to combine colorful items lol</p>
           </ion-col>
-
         </ion-row>
         <ion-row>
           <ion-col size="2">
@@ -88,25 +85,25 @@
 
 
 
-      <div *ngFor="let result of results">
+      <div *ngFor="let comment of commentList">
         <ion-grid class="comment">
           <ion-row>
             <ion-col size="2">
               <ion-avatar>
-                <img src="{{result.imagepath}}">
+             
+                  <img src="{{comment.imagepath}}" (click)="GoToProfilePage(comment.uid)">
+               
               </ion-avatar>
             </ion-col>
-  
             <ion-col size="10">
-              <p><b>{{result.username}}: </b>{{result.comment}}</p>
+              <p><b>{{comment.username}}: </b>{{comment.comment}}</p>
             </ion-col>
-  
           </ion-row>
           <ion-row>
             <ion-col size="2">
             </ion-col>
             <ion-col size="6">
-              <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> {{result.datetime}} <p>
+              <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> {{comment.datetime}} <p>
             </ion-col>
             <ion-col size="4">
               <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
@@ -114,17 +111,11 @@
           </ion-row>
         </ion-grid>
       </div>
-
-
-
-
-
-
-
-
-
-
 </ion-content>
+
+
+
+
 
 
 
@@ -150,8 +141,7 @@
             <ion-button type="submit" fill="clear" [disabled]="!validations_form.valid">
               <ion-icon name="paper-plane"></ion-icon>
             </ion-button>
-          </ion-col>
-        
+          </ion-col>  
       </ion-row>
     </ion-grid>
   </form>

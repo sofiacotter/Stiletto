@@ -17,17 +17,12 @@ export class ProfileotherPage implements OnInit {
   uid: string;
   myUid: string;
   nposts: number = 0;
-  nfollowing: number = 0;
-  nfollowers: number = 0;
   public isLoaded1 =false;
   public isLoaded2 =false;
-  public isLoaded3 =false;
-  public isLoaded4 =false;
   public results: SearchResults[] = [];
   public isFollow: boolean = false;
+  public buttonFollowValid: boolean = true;
   public userInfo: userDetails = null;
-  public followers: string [] = [];
-  public followings: string [] = [];
 
 
 
@@ -47,6 +42,12 @@ export class ProfileotherPage implements OnInit {
     this.myUid = this.fser.getUid();
 
 
+    //Se não for o meu user, revela o botão Follow
+    if(this.uid === this.myUid){
+      this.buttonFollowValid = false;
+    }
+
+
 
 
 
@@ -57,10 +58,18 @@ export class ProfileotherPage implements OnInit {
           uid: e.payload.doc.data()['uid'],
           email: e.payload.doc.data()['email'],
           username: e.payload.doc.data()['username'],
-          profilephoto: e.payload.doc.data()['profilephoto']
+          profilephoto: e.payload.doc.data()['profilephoto'],
+          followers: e.payload.doc.data()['followers'],
+          following: e.payload.doc.data()['following']
         };
       });
       this.isLoaded1 = true;
+      if(this.userInfo.followers.includes(this.myUid)){
+        this.isFollow = true;
+      }
+      else{
+        this.isFollow = false;
+      }
     });
 
 
@@ -84,39 +93,6 @@ export class ProfileotherPage implements OnInit {
       this.nposts = this.results.length;
       this.isLoaded2 = true;
     });
-
-
-
-    this.fser.GetFollowers(this.uid).subscribe(data => {
-      this.followers = [];
-      data.map(e => {
-        this.followers.push(e.payload.doc.data()['uid']);
-      });
-      this.nfollowers = this.followers.length;
-      this.isLoaded3 = true;
-      if(this.followers.includes(this.myUid)){
-        this.isFollow = true;
-      }
-      else{
-        this.isFollow = false;
-      }
-    });
-
-    this.fser.GetFollowings(this.uid).subscribe(data => {
-      this.followings = [];
-      data.map(e => {
-        this.followings.push(e.payload.doc.data()['uid']);
-      });
-      this.nfollowing = this.followings.length;
-      this.isLoaded4 = true;
-    });
-
-
-
-
-
-
-
 
   }
 
@@ -172,11 +148,11 @@ export class ProfileotherPage implements OnInit {
 
   Follow(){
     this.isFollow = true;
-    this.fser.Follow1(this.uid).then( res => {
+    this.fser.Follow1(this.uid, this.userInfo.following).then( res => {
     }, err => {
       console.log("ERRO AO FOLLOW 1!");
     })
-    this.fser.Follow2(this.uid).then( res => {
+    this.fser.Follow2(this.uid, this.userInfo.followers).then( res => {
     }, err => {
       console.log("ERRO AO FOLLOW 2!");
     });
@@ -185,11 +161,11 @@ export class ProfileotherPage implements OnInit {
 
   Unfollow(){
     this.isFollow = false;
-    this.fser.Unfollow1(this.uid).then( res => {
+    this.fser.Unfollow1(this.uid, this.userInfo.following).then( res => {
     }, err => {
       console.log("ERRO AO UNFOLLOW 1!");
     })
-    this.fser.Unfollow2(this.uid).then( res => {
+    this.fser.Unfollow2(this.uid, this.userInfo.followers).then( res => {
     }, err => {
       console.log("ERRO AO UNFOLLOW 2!");
     });

@@ -5,5 +5,57 @@
 </ion-header>
 
 <ion-content>
+  <form *ngIf="isLoaded1 && isLoaded2" class="form" [formGroup]="validations_form" (ngSubmit)="logForm()">
+    <ion-grid>
+
+      <!-- UPLOAD DE IMAGEM -->
+      <ion-row>
+
+      </ion-row>
+
+
+      <!-- DESCRIÇÃO EM TEXTO -->
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <!--<ion-label><b> Description: </b></ion-label>-->
+            <ion-textarea formControlName="description" rows="6" placeholder="Tell us about your outfit!"></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+
+      <!-- HASHTAGS DE CATEGORIAS -->
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label>Categories </ion-label>
+              <ion-select multiple="true" (ionChange)="Selected($event);" formControlName="selectedCategories" value="selectedCategories" [(ngModel)]= "selectedCategories">
+                <ion-select-option *ngFor="let cat of categories" value="{{cat}}">{{cat}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error ion-margin-horizontal" *ngIf="hashtags.length > 3">
+            <p>You can only select a maximum of 3 categories!</p>
+          </div>
+        </ion-col>
+      </ion-row>
+  
+
+
+      <ion-row size="12">
+      </ion-row>
+      <ion-row size="12">
+      </ion-row>
+    <!-- BOTÕES NO FUNDO -->  
+    <ion-row class="buttonsBottom">
+      <ion-col size="6">
+        <ion-button class="button" size="small" color="dark" (click)="CancelButton()">Cancel</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button class="button" size="small" color="dark" type="submit" [disabled]="!validations_form.valid || hashtags.length < 1 || hashtags.length > 3">Publish</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </form>
 
 </ion-content>
