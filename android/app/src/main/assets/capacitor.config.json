@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Stiletto",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
