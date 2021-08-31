@@ -19,6 +19,7 @@ export class CreatePage implements OnInit {
   public selectedCategories: string = '';
   public userInfo: userDetails = null;
   uid: string;
+  public errorDescription: boolean = false;
 
 
 
@@ -73,9 +74,18 @@ export class CreatePage implements OnInit {
 
 
   Selected(event: any){
-    console.log("EVENTO!", event);
+    console.log("EVENTO CATEGORY SELECTED!", event);
     console.log(event.detail.value);
     this.hashtags = event.detail.value;
+  }
+
+  DescriptionRequiredTrue(event: any){
+    console.log("EVENTO DESCRIPTION REQUIRED TRUE!", event);
+    this.errorDescription = true;
+  }
+  DescriptionRequiredFalse(event: any){
+    console.log("EVENTO DESCRIPTION REQUIRED FALSE!", event);
+    this.errorDescription = false;
   }
 
 

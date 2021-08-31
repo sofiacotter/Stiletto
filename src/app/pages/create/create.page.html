@@ -10,7 +10,9 @@
 
       <!-- UPLOAD DE IMAGEM -->
       <ion-row>
-
+        <ion-button>
+          
+        </ion-button>
       </ion-row>
 
 
@@ -19,7 +21,8 @@
         <ion-col size="12">
           <ion-item>
             <!--<ion-label><b> Description: </b></ion-label>-->
-            <ion-textarea formControlName="description" rows="6" placeholder="Tell us about your outfit!"></ion-textarea>
+            <ion-textarea (ionFocus)="DescriptionRequiredTrue($event)" (ionBlur)="DescriptionRequiredFalse($event)"
+            formControlName="description" rows="6" placeholder="Tell us about your outfit!"></ion-textarea>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -36,6 +39,9 @@
           </ion-item>
           <div class="error ion-margin-horizontal" *ngIf="hashtags.length > 3">
             <p>You can only select a maximum of 3 categories!</p>
+          </div>
+          <div class="error ion-margin-horizontal" *ngIf="errorDescription">
+            <p>Please provide a description for your picture!</p>
           </div>
         </ion-col>
       </ion-row>
