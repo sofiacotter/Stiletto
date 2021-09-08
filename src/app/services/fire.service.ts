@@ -4,15 +4,17 @@ import { userDetails } from '../details';
 
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FireService {
   private snapshotChangesSubscription: any;
-  
-  constructor(public af: AngularFirestore) {
-   
+  private idpostRandom: string;
+ 
+  constructor(public af: AngularFirestore, private storage: AngularFireStorage) {
    }
 
 
@@ -26,10 +28,7 @@ export class FireService {
 
 
 
-  getUid(){
-    return firebase.auth().currentUser.uid;
-  }
-
+  getUid(){return firebase.auth().currentUser.uid;}
 
 
 
@@ -42,10 +41,53 @@ export class FireService {
     //return this.af.collection('categories').doc(currentUser.uid).collection('tasks').snapshotChanges();
   }
 
+  getReviews(idgame: string) {
+    return this.af.collection('Reviews', ref => ref.where('idgame', '==', idgame)).snapshotChanges();
+  }
+
+  writeReview(idgame: string, myusername: string, myavatar: string, myreview: string, myscore: number) {
+    const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
+    const hour = datetime.slice(0, 10);
+    const time = datetime.slice(11, 19);
+    const publicationDate = hour + " " + time;
+    console.log("Data de Publicação: ", publicationDate);
+    return this.af.collection('Reviews').doc(idgame).set({
+      idgame: idgame,
+      uid: firebase.auth().currentUser.uid,
+      username: myusername,
+      avatar: myavatar,
+      review: myreview,
+      score: myscore,
+      publishdate: publicationDate
+    });
+  }
+
+  writeCommentReview(idgame: string, idreview: string, myusername: string, myavatar: string, mycomment: string) {
+    const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
+    const hour = datetime.slice(0, 10);
+    const time = datetime.slice(11, 19);
+    const publicationDate = hour + " " + time;
+    console.log("Data de Publicação: ", publicationDate);
+    return this.af.collection('Reviews').doc(idgame).collection('Comments').add({
+      idreview: idreview,
+      uid: firebase.auth().currentUser.uid,
+      username: myusername,
+      avatar: myavatar,
+      comment: mycomment,
+      publishdate: publicationDate
+    });
+  }
 
 
 
 
+
+
+
+
+
+  /* REGISTO E LOGIN */
+  
   createUsername(details: userDetails){
     let currentUser = firebase.auth().currentUser;
     details = {...details, uid:currentUser.uid}
@@ -71,8 +113,14 @@ export class FireService {
 
 
   getProfilePictures(uid: string){
-    console.log("getProfilePictures() --> ", this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges());
-    return this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges();
+    //return this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges();
+    /*
+    return this.af.collection('profiles').doc(uid).collection('posts', ref => {
+      return ref.orderBy("datetime", "desc");
+   }).get(); */
+
+    const bb = this.af.collection('profiles').doc(uid).collection('Posts', ref => ref.orderBy('datetime', 'desc'));
+    return bb.snapshotChanges();
   }
 
 
@@ -241,20 +289,62 @@ export class FireService {
 
 
 
-  /* PUBLICAR POST */
 
-  Publish(usern: string, profilep: string, hash: string, desc: string, filename: string){
+
+
+
+
+
+
+
+   UploadToStorage(photoBase64String: string, filename: string){
+    var donwloadURLFinal = "";
+    var uploadTask = firebase.storage().ref('uploaded/'+filename).putString(photoBase64String, 'base64');
+
+    uploadTask.on('state_changed', function(snapshot){
+      // Observe state change events such as progress, pause, and resume
+      // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case firebase.storage.TaskState.PAUSED: // or 'paused'
+          console.log('Upload is paused');
+          break;
+        case firebase.storage.TaskState.RUNNING: // or 'running'
+          console.log('Upload is running');
+          break;
+      }
+    }, function(error) {
+      console.log("ERROR!! Upload was not done...")
+    }, function() {
+      // Handle successful uploads on complete
+      // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+      uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        donwloadURLFinal = downloadURL;
+      });
+    });
+    return donwloadURLFinal;
+  }
+
+
+  /*
+  async getPhotoUrl(filename: string) {
+    return this.storage.refFromURL('gs://stiletto-5b547.appspot.com/uploaded/'+filename).getDownloadURL().toPromise();
+  }
+  */
+
+
+
+
+
+  PublishPost(usern: string, profilep: string, hash: string, desc: string, filename: string){
     let userID = firebase.auth().currentUser.uid;
-    const datetime = new Date().toJSON("yyyy/MM/dd HH:mm");
-    const hour = datetime.slice(0, 10);
-    const time = datetime.slice(11, 19);
-    const publicationDate = hour + " " + time;
-    const idpostGenerated = this.af.createId();
-    return this.af.collection('saves').doc(userID).collection('posts').doc(idpostGenerated).set({
-      idpost: idpostGenerated,
+    this.idpostRandom = this.af.createId();
+    return this.af.collection('posts').doc(this.idpostRandom).set({
+      idpost: this.idpostRandom,
       uid: userID,
       imagepath: filename,
-      datetime: publicationDate,
+      datetime: firebase.firestore.Timestamp.fromDate(new Date()),
       hashtags: hash,
       description: desc,
       likes: [],
@@ -262,6 +352,46 @@ export class FireService {
       profilephoto: profilep,
       username: usern
     });
+  }
+
+  PublishPostSearch(category: string, filename: string){
+    return this.af.collection('searches').doc(category).collection('Posts').doc(this.idpostRandom).set({
+      idpost: this.idpostRandom,
+      imagepath: filename,
+    });
+  }
+
+  PublishPostProfile(uid: string, filename: string){
+  
+    return this.af.collection('profiles').doc(uid).collection('Posts').doc(this.idpostRandom).set({
+      idpost: this.idpostRandom,
+      datetime: firebase.firestore.Timestamp.fromDate(new Date()),
+      imagepath: filename,
+    }); 
+  }
+
+
+
+
+
+
+
+
+  RemovePostPosts(idpost: string){
+    return this.af.collection('posts').doc(idpost).delete();
+  }
+  RemovePostSearch(idpost: string, category: string){
+    console.log("REMOVEPOSTSEARCH");
+    return this.af.collection('searches').doc(category).collection('Posts').doc(idpost).delete();
+  }
+  RemovePostProfile(idpost: string, uid: string){
+    console.log("REMOVEPOSTSEARCH");
+    return this.af.collection('profiles').doc(uid).collection('Posts').doc(idpost).delete();
+  }
+  RemovePostFromSaves(idpost: string){
+    let userID = firebase.auth().currentUser.uid;
+    console.log("REMOVEPOSTSAVES");
+    return this.af.collection('saves').doc(userID).collection('posts').doc(idpost).delete();
   }
 
 
