@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from "@angular/common";
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
-import { PopoverController } from '@ionic/angular';
+import { MypostpopupComponent } from 'src/app/components/mypostpopup/mypostpopup.component';
+import { PopoverController, ToastController } from '@ionic/angular';
 import { Comment, PostInfo, userDetails } from 'src/app/details';
 import { FireService } from 'src/app/services/fire.service';
 
@@ -27,11 +28,12 @@ export class PostPage implements OnInit {
   //this.router.navigate(["/tabs/search"]);
   constructor(private router: Router, private location: Location, 
     private popCtrl: PopoverController, private activatedRoute: ActivatedRoute,
-    private fser: FireService) {
+    private fser: FireService, public toastController: ToastController) {
     
       //this.idpost = "CCJSlDnG7vecDDHLyXgC";
-      console.log("Idpost post.page: ", this.idpost);
       this.idpost = this.activatedRoute.snapshot.paramMap.get('idpost'); 
+      console.log("Idpost recebido paramMap: ", this.idpost);
+      console.log("postInfo antes: ", this.postInfo);
   }
 
 
@@ -39,15 +41,13 @@ export class PostPage implements OnInit {
 
   ngOnInit() {
     this.myUid = this.fser.getUid();
-    console.log("My UID: ", this.myUid);
-
 
     /*
     BUSCAR POST + COMENTÁRIOS
     */
     this.fser.getPost(this.idpost).subscribe(data => {
+      this.ShowErrorAndDelete(data);
       data.map(e => {
-        console.log("GetPosts() data raw ----> ", e.payload.doc.data());
         this.postInfo = {
           uid: e.payload.doc.data()['uid'],
           idpost: e.payload.doc.id,
@@ -80,6 +80,8 @@ export class PostPage implements OnInit {
         let time = `${ts.getHours()}:${ts.getMinutes()}`; 
         this.dateString = date +  " " + time;
         this.isLoaded = true;
+        console.log("postInfo depois: ", this.postInfo);
+        console.log("isLoaded: ", this.isLoaded);
         console.log("Post Info: ", this.postInfo);
         console.log("Comments List: ", this.commentsList);
         // Definir se há LIKE ou SAVE neste post
@@ -88,8 +90,40 @@ export class PostPage implements OnInit {
 
         if(this.postInfo.saves.includes(this.myUid)) this.isSaved = true;
         if(!this.postInfo.saves.includes(this.myUid)) this.isSaved = false;
+
       });
     });
+  }
+
+
+  async ShowErrorAndDelete(data: any){
+    console.log("async ShowErrorAndDelete()");
+    if(data.length < 1){
+    
+      const toast = await this.toastController.create({
+        message: 'Sorry! This post does not exist! Please wait...',
+        duration: 3000,
+        color: 'danger',
+        position: 'top'
+      });
+      toast.present();
+      
+
+
+    // Eliminar post dos meus salvados
+    this.fser.RemovePostFromSaves(this.idpost).then(res => {
+      console.log("POST REMOVED SUCCESSFULLY FROM SAVES (THIS USER)");
+    }, err => {
+      console.log("ERROR REMOVING POST FROM PROFILE");
+    });
+
+      await this.delay(2000);
+      this.router.navigate(["/tabs/timeline"]);
+    }
+  }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
 
@@ -118,11 +152,22 @@ export class PostPage implements OnInit {
 
   async OpenPostOptions(ev: any){
     console.log("Here are your options...");
-    const popover = await this.popCtrl.create({
-      component: PostpopComponent,
-      event: ev
-      });  
-      return await popover.present();
+    if(this.postInfo.uid === this.myUid){
+      const popover = await this.popCtrl.create({
+        component: MypostpopupComponent,
+        event: ev,
+        componentProps: {idpost: this.idpost, hashtags: this.postInfo.hashtags, uid: this.postInfo.uid, popover: this.popCtrl}
+        });  
+        return await popover.present();
+    }
+    else{
+      const popover = await this.popCtrl.create({
+        component: PostpopComponent,
+        event: ev,
+        });  
+        return await popover.present();
+    }
+    
   }
 
 

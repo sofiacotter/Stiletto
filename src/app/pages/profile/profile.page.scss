@@ -1,6 +1,6 @@
 ion-title{
     font-family: 'Nunito Sans';
-    font-size: 20px;
+    font-size: x-large;
 }
 
 #top{
@@ -22,11 +22,30 @@ ion-title{
     height:65%
 }
 
-#gallery{
-    --ion-grid-column-padding: 1px;
-    padding-bottom: 20%;
+
+
+
+// GALERIA
+// GALERIA
+
+ion-grid{
+    img{
+        //width: 100%;
+        position:relative;
+        overflow:hidden;
+        width: var(--input-custom-width);
+        height: var(--input-custom-width);
+    }
 }
 
+
+ion-grid{
+ --ion-grid-padding: 1px;
+ --ion-grid-column-padding: 1px;
+ //--ion-grid-row-padding: 0%;
+
+}
+//-----------------
 
 
 

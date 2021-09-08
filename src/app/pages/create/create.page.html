@@ -8,28 +8,35 @@
   <form *ngIf="isLoaded1 && isLoaded2" class="form" [formGroup]="validations_form" (ngSubmit)="logForm()">
     <ion-grid>
 
-      <!-- UPLOAD DE IMAGEM -->
       <ion-row>
-        <ion-button>
-          
+       
+      </ion-row>
+
+      <!-- UPLOAD DE IMAGEM -->
+      <ion-row class="row">
+        <ion-button fill="clear" (click)="UploadPicture()">
+          <ion-icon size="large" name="camera-outline"></ion-icon>
         </ion-button>
       </ion-row>
 
 
       <!-- DESCRIÇÃO EM TEXTO -->
-      <ion-row>
+      <ion-row class="row">
         <ion-col size="12">
           <ion-item>
             <!--<ion-label><b> Description: </b></ion-label>-->
             <ion-textarea (ionFocus)="DescriptionRequiredTrue($event)" (ionBlur)="DescriptionRequiredFalse($event)"
             formControlName="description" rows="6" placeholder="Tell us about your outfit!"></ion-textarea>
           </ion-item>
+          <div class="error ion-margin-horizontal" *ngIf="errorDescription">
+            <p>Please provide a description for your picture!</p>
+          </div>
         </ion-col>
       </ion-row>
 
 
       <!-- HASHTAGS DE CATEGORIAS -->
-      <ion-row>
+      <ion-row class="row">
         <ion-col size="12">
           <ion-item>
             <ion-label>Categories </ion-label>
@@ -40,25 +47,18 @@
           <div class="error ion-margin-horizontal" *ngIf="hashtags.length > 3">
             <p>You can only select a maximum of 3 categories!</p>
           </div>
-          <div class="error ion-margin-horizontal" *ngIf="errorDescription">
-            <p>Please provide a description for your picture!</p>
-          </div>
         </ion-col>
       </ion-row>
   
 
-
-      <ion-row size="12">
-      </ion-row>
-      <ion-row size="12">
-      </ion-row>
-    <!-- BOTÕES NO FUNDO -->  
+    <!-- BOTÃO NO FUNDO -->  
     <ion-row class="buttonsBottom">
+      <!--
       <ion-col size="6">
         <ion-button class="button" size="small" color="dark" (click)="CancelButton()">Cancel</ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button class="button" size="small" color="dark" type="submit" [disabled]="!validations_form.valid || hashtags.length < 1 || hashtags.length > 3">Publish</ion-button>
+      </ion-col> -->
+      <ion-col size="12">
+        <ion-button (click) = "popupAlertConfirm()" class="button ion-margin" color="dark" type="submit" [disabled]="!validations_form.valid || hashtags.length < 1 || hashtags.length > 3 || photoInfo==null">Publish</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

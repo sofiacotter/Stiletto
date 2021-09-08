@@ -79,7 +79,8 @@ export class Register1Page implements OnInit, OnDestroy {
       uid: '',
       email: this.message.email,
       username: value.username,
-      profilephoto: "../assets/images/profilepics/default.png",
+      //profilephoto: "../assets/images/profilepics/default.png",
+      profilephoto: "https://firebasestorage.googleapis.com/v0/b/stiletto-5b547.appspot.com/o/profilepics%2Fdefault.png?alt=media&token=9795a1ee-492d-458c-8a98-6692bff35313",
       followers: [],
       following: []
     }

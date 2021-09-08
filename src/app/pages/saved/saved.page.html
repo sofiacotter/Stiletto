@@ -5,10 +5,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid id="gallery" *ngIf="isLoaded">
+  <ion-grid *ngIf="isLoaded">
     <ion-row>
       <ion-col size="4" *ngFor="let result of results">
-        <ion-img src="{{result.imagepath}}" (click)="OpenPost(result.idpost)"></ion-img>
+        <img src="{{result.imagepath}}" (click)="OpenPost(result.idpost)">
       </ion-col>
     </ion-row>
   </ion-grid>

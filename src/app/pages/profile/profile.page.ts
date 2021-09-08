@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingspopComponent } from 'src/app/components/settingspop/settingspop.component';
-import { PopoverController } from '@ionic/angular';
+import { Platform, PopoverController } from '@ionic/angular';
 import { FireService } from 'src/app/services/fire.service';
 import { FireauthService } from 'src/app/services/fireauth.service';
 import firebase from 'firebase/app';
@@ -22,17 +22,29 @@ export class ProfilePage implements OnInit {
   public isLoaded2 =false;
   public results: SearchResults[] = [];
   uid:string;
+  public colWidth: string = "";
+  private p: Platform;
 
 
 
   constructor(private router: Router, private popCtrl: PopoverController,
-    private fser: FireService, private authService: FireauthService) {
+    private fser: FireService, private authService: FireauthService, private platform: Platform) {
+      this.p = platform;
   }
 
 
 
 
   ngOnInit() {
+    this.p.ready().then(() => {
+      console.log('SCREEN Width: ' + this.p.width());
+      console.log('SCREEN Height: ' + this.p.height());
+    });
+
+    this.colWidth += (this.p.width()/3-4)+"px";
+    console.log("ROW WIDTH: ", this.colWidth);
+    document.documentElement.style.setProperty('--input-custom-width', this.colWidth);
+
 
     this.uid = this.fser.getUid();
 
@@ -56,6 +68,7 @@ export class ProfilePage implements OnInit {
 
 
       this.fser.getProfilePictures(this.uid).subscribe(data => {
+        this.results = [];
         data.map(e => {
           this.results.push({
             //idpost: e.payload.doc.id,
@@ -65,7 +78,7 @@ export class ProfilePage implements OnInit {
         });
         this.nposts = this.results.length;
         this.isLoaded2 = true;
-        console.log("Results Found: ", this.results);
+        console.log("Posts from this profile: ", this.results);
       });
 
   }
