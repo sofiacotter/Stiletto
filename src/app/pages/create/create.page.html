@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <form *ngIf="isLoaded1 && isLoaded2" class="form" [formGroup]="validations_form" (ngSubmit)="logForm()">
+  <form *ngIf="isLoaded1 && isLoaded2" class="form" [formGroup]="validations_form">
     <ion-grid>
 
       <ion-row>
@@ -14,9 +14,13 @@
 
       <!-- UPLOAD DE IMAGEM -->
       <ion-row class="row">
-        <ion-button fill="clear" (click)="UploadPicture()">
-          <ion-icon size="large" name="camera-outline"></ion-icon>
-        </ion-button>
+          <ion-button fill="clear" (click)="UploadPicture()">
+            <ion-icon size="large" name="camera-outline"></ion-icon>
+            <ion-icon size="large" name="checkmark-done-outline" *ngIf="photoInfo!=null"></ion-icon>
+          </ion-button>
+        <div class="error ion-margin-horizontal" *ngIf="photoInfo==null">
+          <p>Please upload 1 photo!</p>
+        </div>
       </ion-row>
 
 

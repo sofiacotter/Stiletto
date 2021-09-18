@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { TagContentType } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 export class FireService {
   private snapshotChangesSubscription: any;
   private idpostRandom: string;
- 
+  private token:string; //variavel local, privada
   constructor(public af: AngularFirestore, private storage: AngularFireStorage) {
    }
 
@@ -113,14 +114,13 @@ export class FireService {
 
 
   getProfilePictures(uid: string){
-    //return this.af.collection('profiles').doc(uid).collection('Posts').snapshotChanges();
     /*
-    return this.af.collection('profiles').doc(uid).collection('posts', ref => {
+    return this.af.collection('profiles').doc(uid).collection('Posts', ref => {
       return ref.orderBy("datetime", "desc");
    }).get(); */
-
+   
     const bb = this.af.collection('profiles').doc(uid).collection('Posts', ref => ref.orderBy('datetime', 'desc'));
-    return bb.snapshotChanges();
+    return bb.snapshotChanges(); 
   }
 
 
@@ -298,7 +298,7 @@ export class FireService {
 
 
    UploadToStorage(photoBase64String: string, filename: string){
-    var donwloadURLFinal = "";
+    /* var donwloadURLFinal = "";
     var uploadTask = firebase.storage().ref('uploaded/'+filename).putString(photoBase64String, 'base64');
 
     uploadTask.on('state_changed', function(snapshot){
@@ -323,7 +323,14 @@ export class FireService {
         donwloadURLFinal = downloadURL;
       });
     });
-    return donwloadURLFinal;
+    return donwloadURLFinal; */
+
+    const ref = this.storage.ref('uploaded/'+filename);
+    
+    const task = ref.putString(photoBase64String, 'base64').snapshotChanges().toPromise()
+
+    return task
+
   }
 
 
@@ -362,7 +369,6 @@ export class FireService {
   }
 
   PublishPostProfile(uid: string, filename: string){
-  
     return this.af.collection('profiles').doc(uid).collection('Posts').doc(this.idpostRandom).set({
       idpost: this.idpostRandom,
       datetime: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -416,6 +422,32 @@ export class FireService {
   the later one provides us with unique document ID assigned to document whereas 
   the former one only supplies us with document values but not with document id.
   */
+
+
+
+
+
+  // ---------------------- NOTIFICATIONS --------------------------------------
+
+  getFirebaseToken(){
+
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(myID).get();
+  }
+
+  updateFirebaseToken(newtoken:string){
+    let myID = firebase.auth().currentUser.uid;
+    return this.af.collection('userDetails').doc(myID).update({
+      token: newtoken })
+  }
+
+  setToken(token:string){
+    this.token = token;
+  }
+  getToken(){
+    return this.token;
+  }
+
 
 }
 

@@ -1,14 +1,21 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
+@font-face {
+  font-family: 'Parisienne';
+  src: url('../assets/fonts/Parisienne-Regular.ttf');
+}
 
+
+@font-face {
+font-family: 'Nunito Sans';
+src: url('../assets/fonts/Nunito/NunitoSans-Regular.ttf');
+}
 
 ion-content{
-
   --ion-background-color: #ecfdf1;
 }
 ion-toolbar{
   --background: #ecfdf1;
-
 }
 ion-title{
   position: absolute;

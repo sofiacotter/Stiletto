@@ -13,7 +13,8 @@ export class DataService {
     username: '',
     profilephoto: '',
     followers: [],
-    following: []
+    following: [],
+    token: ''
   };
 
   private messageSource = new BehaviorSubject(this.user);

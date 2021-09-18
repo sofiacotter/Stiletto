@@ -67,12 +67,12 @@ ion-grid{
     height: fit-content; 
     padding-left: 2%;
     padding-top: 2%;
-    padding-bottom: 2%;
+    //padding-bottom: 2%;
 }
 
 /*fotografia circular de perfil */
 .profile-photo{
-    margin-top: 15%;
+    //margin-top: 15%;
     border: 2px solid #fff;
     border-radius: 50%;
     box-shadow: 0 0 5px grey;
@@ -83,6 +83,12 @@ ion-grid{
 .text{
     font-family: 'Nunito Sans';
     text-align: center;
+}
+
+
+
+.followButton{
+    margin-left: 20px;
 }
 
 

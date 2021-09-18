@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PopoverController, ToastController } from '@ionic/angular';
+import { AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { FireService } from 'src/app/services/fire.service';
 
 @Component({
@@ -19,7 +19,8 @@ export class MypostpopupComponent implements OnInit {
   categories: string[] = [];
 
 
-  constructor(private fser: FireService, private router: Router, public toastController: ToastController) { }
+  constructor(private fser: FireService, private router: Router, public toastController: ToastController,
+    public alertController: AlertController) { }
 
   ngOnInit() {
  
@@ -36,26 +37,8 @@ export class MypostpopupComponent implements OnInit {
   }
 
 
-  async TestNavigate(){
-   
-    const toast = await this.toastController.create({
-      message: 'Your post is now deleted!',
-      duration: 2000,
-      color: 'success',
-      position: 'top'
-    });
-    toast.present();
-    
-    await this.delay(2000);
-    this.popover.dismiss();
-    this.router.navigate(["/tabs/profile"]);
-   
-  }
-
-
 
   async RemovePost(){
-    console.log("RemovePost!!!!");
     console.log("Idpost: ", this.idpost);
 
 
@@ -95,6 +78,7 @@ export class MypostpopupComponent implements OnInit {
 
 
 
+    /*
     const toast = await this.toastController.create({
       message: 'Your post is being deleted! Please wait...',
       duration: 3000,
@@ -103,8 +87,9 @@ export class MypostpopupComponent implements OnInit {
     });
     toast.present();
     
-    await this.delay(3000);
+    */
     this.popover.dismiss();
+    await this.delay(3000);
     this.router.navigate(["/tabs/timeline"]);
   
      
@@ -113,6 +98,36 @@ export class MypostpopupComponent implements OnInit {
 
   delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+
+
+
+
+  async popupAlertConfirm() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Are you sure',
+      message: 'you want to eliminate this post permanently?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('CANCEL');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('OKAY DELETE');
+            this.RemovePost();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

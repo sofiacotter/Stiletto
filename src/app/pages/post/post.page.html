@@ -35,7 +35,7 @@
   
     <!-- Imagem -->
     <ion-row>
-      <img src="{{postInfo.imagepath}}">
+        <img style="width: 100%;" src="{{postInfo.imagepath}}"> 
     </ion-row>
     
     
@@ -49,7 +49,7 @@
         </ion-col>
         <ion-col size="3" class="icons" (click)="OpenComments()">
           <ion-button fill="clear">
-            <ion-icon style="padding: 3px;" ion-align-self-center name="pencil-outline"></ion-icon>
+            <ion-icon style="padding: 3px;" ion-align-self-center name="chatbox-outline"></ion-icon>
             <ion-label ion-align-self-center>{{2+commentsList.length}}</ion-label>
           </ion-button>
         </ion-col>

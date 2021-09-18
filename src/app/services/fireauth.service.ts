@@ -19,35 +19,21 @@ export class FireauthService {
 
 
   doRegister(value) {
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().createUserWithEmailAndPassword(value.email,
-        value.password)
-        .then(
-          res => resolve(res),
-          err => reject(err))
-    })
+    return this.afAuth.createUserWithEmailAndPassword(
+      value.email,
+      value.password
+    );
   }
 
   doLogin(value) {
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().signInWithEmailAndPassword(value.email,
-        value.password)
-        .then(
-          res => resolve(res),
-          err => reject(err))
-    })
+    return this.afAuth.signInWithEmailAndPassword(value.email, value.password);
   }
 
   doLogout() {
-    return new Promise<void>((resolve, reject) => {
-      this.afAuth.signOut()
-        .then(() => {
-          this.firebaseService.unsubscribeOnLogOut();
-          resolve();
-        }).catch((error) => {
-          console.log(error);
-          reject();
-        });
-    })
+    return this.afAuth.signOut();
+  }
+
+  getAuthState() {
+    return this.afAuth.authState;
   }
 }

@@ -5,6 +5,7 @@ export class userDetails {
     profilephoto: string;
     followers: string[];
     following: string[];
+    token: string;
 } 
 
 

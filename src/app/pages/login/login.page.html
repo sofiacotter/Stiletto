@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header >
   <ion-toolbar>
     <ion-title>Stiletto</ion-title>
   </ion-toolbar>
@@ -7,8 +7,11 @@
 
 
 
-<ion-content padding class="form-content">
+<ion-content  padding class="form-content">
+  
 
+
+  
   <form class="form" [formGroup]="validations_form" (ngSubmit)="tryLogin(validations_form.value)">
 
     <ion-item>
@@ -48,7 +51,6 @@
   </p>
   <p style="text-align: center;"> <a class="textbottom1" (click)="goRegisterPage()">Create an account.</a>
   </p>
-
 
 
 </ion-content>

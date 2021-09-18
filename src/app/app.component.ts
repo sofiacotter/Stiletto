@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NotificationsService } from './services/notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(private notifications: NotificationsService) {
+    this.initializeApp();
+  }
+
+
+  initializeApp(){
+    this.notifications.initNotifications()
+  }
 }

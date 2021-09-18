@@ -65,7 +65,8 @@ export class CommentsPage implements OnInit {
           username: e.payload.doc.data()['username'],
           profilephoto: e.payload.doc.data()['profilephoto'],
           followers: e.payload.doc.data()['followers'],
-          following: e.payload.doc.data()['following']
+          following: e.payload.doc.data()['following'],
+          token: e.payload.doc.data()['token'],
         };
       });
       this.isLoaded1 = true;
@@ -143,7 +144,7 @@ export class CommentsPage implements OnInit {
     console.log("Clicou em GoToProfilePage()!");
     if(this.myUid === uid){
         console.log("It´s the same user!");
-        //this.router.navigate(["/tabs/profile"]);
+        this.router.navigate(["/tabs/profile"]);
     }
     else{
         console.log("It´s a different user! "+ uid);

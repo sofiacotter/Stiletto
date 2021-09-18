@@ -82,7 +82,8 @@ export class Register1Page implements OnInit, OnDestroy {
       //profilephoto: "../assets/images/profilepics/default.png",
       profilephoto: "https://firebasestorage.googleapis.com/v0/b/stiletto-5b547.appspot.com/o/profilepics%2Fdefault.png?alt=media&token=9795a1ee-492d-458c-8a98-6692bff35313",
       followers: [],
-      following: []
+      following: [],
+      token: this.fire.getToken(), // adicionado por mim :3
     }
 
     // Verificar se existe algum username na base de dados com este valor inserido
@@ -90,16 +91,16 @@ export class Register1Page implements OnInit, OnDestroy {
     this.isvalid = ! this.usernameList.includes(this.validations_form.controls['username'].value);
     
     
-  if(this.isvalid){
-    this.fire.createUsername(t).then( res => {
-      this.errorMessage = "",
-      this.router.navigate(['tabs/timeline'])
-    }, err => {
-      this.errorMessage = err.message;
-    })
-  } else{
-    this.errorMessage = "Username Already Exists"
-  }
+    if(this.isvalid){
+      this.fire.createUsername(t).then( res => {
+        this.errorMessage = "",
+        this.router.navigate(['tabs/timeline'])
+      }, err => {
+        this.errorMessage = err.message;
+      })
+    } else{
+      this.errorMessage = "Username Already Exists"
+    }
   
     
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { PopoverController } from '@ionic/angular';
 import { PostpopComponent } from 'src/app/components/postpop/postpop.component';
 import { Comment, PostInfo, userDetails } from 'src/app/details';
@@ -37,7 +38,8 @@ export class TimelinePage implements OnInit {
           username: e.payload.doc.data()['username'],
           profilephoto: e.payload.doc.data()['profilephoto'],
           followers: e.payload.doc.data()['followers'],
-          following: e.payload.doc.data()['following']
+          following: e.payload.doc.data()['following'],
+          token: e.payload.doc.data()['token'],
         };
       });
       console.log("User Info: ", this.userInfo);

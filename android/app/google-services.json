@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "691695889948",
+    "project_id": "stiletto-5b547",
+    "storage_bucket": "stiletto-5b547.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691695889948:android:288c9f5464d1560b0cf9d9",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691695889948-j3ff40iuk3c07o5j2oihelk4htsnr8ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjy1Es7mrsg6WI4lod0mxLmWRhouhZI4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691695889948-j3ff40iuk3c07o5j2oihelk4htsnr8ks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

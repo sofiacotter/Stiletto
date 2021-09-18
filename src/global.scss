@@ -9,6 +9,8 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+
+
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
 
@@ -25,14 +27,3 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-
-@font-face {
-    font-family: 'Parisienne';
-    src: url('./assets/fonts/Parisienne-Regular.ttf');
-  }
-
-
-@font-face {
-  font-family: 'Nunito Sans';
-  src: url('./assets/fonts/Nunito/NunitoSans-Regular.ttf');
-}

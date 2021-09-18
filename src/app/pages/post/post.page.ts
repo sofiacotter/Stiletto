@@ -101,7 +101,7 @@ export class PostPage implements OnInit {
     if(data.length < 1){
     
       const toast = await this.toastController.create({
-        message: 'Sorry! This post does not exist! Please wait...',
+        message: 'Sorry! This post does not exist anymore! Please wait...',
         duration: 3000,
         color: 'danger',
         position: 'top'
@@ -254,7 +254,15 @@ export class PostPage implements OnInit {
 
 
   GoToProfilePage(){
-    console.log("Clicou em GoToProfilePage()!");
-    this.router.navigate(["/profileother/"+this.postInfo.uid]);
+    //console.log("Clicou em GoToProfilePage()!");
+    //this.router.navigate(["/profileother/"+this.postInfo.uid]);
+    if(this.myUid === this.postInfo.uid){
+      console.log("It´s the same user!");
+      this.router.navigate(["/tabs/profile"]);
+  }
+  else{
+      console.log("It´s a different user! "+ this.postInfo.uid);
+      this.router.navigate(["/profileother/"+this.postInfo.uid]);
+  }
   }
 }

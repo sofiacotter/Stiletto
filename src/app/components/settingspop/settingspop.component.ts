@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FireauthService } from 'src/app/services/fireauth.service';
 import { FireService } from 'src/app/services/fire.service';
 import { Router } from '@angular/router';
+import { PopoverController } from '@ionic/angular';
 
 
 
@@ -13,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class SettingspopComponent implements OnInit {
 
+  @Input() popover: PopoverController;
+
   constructor(private fser: FireService, private authService: FireauthService,
     private router: Router) { }
 
@@ -20,7 +23,7 @@ export class SettingspopComponent implements OnInit {
 
 
   Logout(){
-    console.log("Logout!");
+    this.popover.dismiss();
     this.authService.doLogout()
       .then(res => {
         console.log("Unsubscribe foi bem sucedido!");

@@ -71,7 +71,8 @@ export class RegisterPage implements OnInit {
           username: '',
           profilephoto: '',
           followers: [],
-          following: []
+          following: [],
+          token: '',
         };
 
         this.dataService.changeMessage(user)

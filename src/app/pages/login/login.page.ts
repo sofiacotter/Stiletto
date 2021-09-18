@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { FireauthService } from '../../services/fireauth.service';
 import { Router } from '@angular/router';
+import { FireService } from 'src/app/services/fire.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ export class LoginPage implements OnInit {
 
   validations_form: FormGroup;
   errorMessage: string = '';
+  isDone: boolean = false;
 
   validation_messages = {
     'email': [
@@ -24,11 +26,30 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: FireauthService,
+    private fire:FireService,
     private formBuilder: FormBuilder,
     private router: Router
   ) { }
 
+
+
+
+
+
+
+
+
+
+
+
   ngOnInit() {
+
+
+    setTimeout(()=> {}, 2000);
+
+
+
+
     this.validations_form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
           Validators.required,
@@ -41,9 +62,28 @@ export class LoginPage implements OnInit {
     });
   }
 
+
+  /* Quando o Login é válido, ele faz o then(), verificar o Token no Firebase se é igual
+  ao token que me deram. Substiruir o que está no Firebase pela variável local do serviço */
+
   tryLogin(value: { email: string; password: string; }) {
     this.authService.doLogin(value)
       .then(res => {
+        let oldToken;
+        const newToken = this.fire.getToken(); // o token quando abrimos a app
+
+        const oldtokenRef = this.fire.getFirebaseToken();
+
+        oldtokenRef.forEach(e => {
+          oldToken = e.data()['token']
+          console.log("oldToken", oldToken)
+        })
+
+        if(oldToken != newToken){
+          this.fire.updateFirebaseToken(newToken);
+          console.log("tokenUpdated")
+        }
+
 
         this.router.navigate(["/tabs"]);
       }, err => {
@@ -55,5 +95,13 @@ export class LoginPage implements OnInit {
   goRegisterPage() {
     this.router.navigate(["/register"]);
   }
+
+
+
+
+
+
+
+
   
 }

@@ -58,7 +58,8 @@ export class ProfilePage implements OnInit {
             username: e.payload.doc.data()['username'],
             profilephoto: e.payload.doc.data()['profilephoto'],
             followers: e.payload.doc.data()['followers'],
-            following: e.payload.doc.data()['following']
+            following: e.payload.doc.data()['following'],
+            token: e.payload.doc.data()['token'],
           };
         });
         this.isLoaded1 = true;
@@ -67,6 +68,7 @@ export class ProfilePage implements OnInit {
 
 
 
+      
       this.fser.getProfilePictures(this.uid).subscribe(data => {
         this.results = [];
         data.map(e => {
@@ -80,6 +82,30 @@ export class ProfilePage implements OnInit {
         this.isLoaded2 = true;
         console.log("Posts from this profile: ", this.results);
       });
+   
+
+
+
+
+      /*
+      this.fser.getProfilePictures(this.uid).subscribe((p) => {
+        let data: any = p;
+        this.results = [];
+        data.forEach(e => {
+          console.log("e: ", e);
+          console.log("e.data(): ", e.data())
+          console.log("idpost: ", e.data()['idpost']);
+          console.log("imagepath: ", e.data()['imagepath']);
+          this.results.push({
+            idpost: e.data()['idpost'],
+            imagepath: e.data()['imagepath'],
+          }); 
+          this.nposts = this.results.length;
+          this.isLoaded2 = true;
+          console.log("Posts from this profile: ", this.results);
+        });
+      }); 
+      */
 
   }
 
@@ -90,7 +116,8 @@ export class ProfilePage implements OnInit {
 
     const popover = await this.popCtrl.create({
       component: SettingspopComponent,
-      event: ev
+      event: ev,
+      componentProps: {popover: this.popCtrl}
     });
 
     return await popover.present();

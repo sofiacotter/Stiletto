@@ -63,7 +63,6 @@ export class ProfileotherPage implements OnInit {
 
 
     this.fser.getUserDetails(this.uid).subscribe(data => {
-      this.results = [];
       data.map(e => {
         this.userInfo = {
           uid: e.payload.doc.data()['uid'],
@@ -71,7 +70,8 @@ export class ProfileotherPage implements OnInit {
           username: e.payload.doc.data()['username'],
           profilephoto: e.payload.doc.data()['profilephoto'],
           followers: e.payload.doc.data()['followers'],
-          following: e.payload.doc.data()['following']
+          following: e.payload.doc.data()['following'],
+          token: e.payload.doc.data()['token'],
         };
       });
       this.isLoaded1 = true;
@@ -88,10 +88,34 @@ export class ProfileotherPage implements OnInit {
 
 
 
+ 
+   /*
+    this.fser.getProfilePictures(this.uid).subscribe((p) => {
+        let data: any = p;
+        console.log("p: ", p)
+        this.results = [];
+        data.forEach(e => {
+          console.log("e: ", e);
+          console.log("e.data(): ", e.data());
+          console.log("idpost: ", e.data()['idpost']);
+          console.log("imagepath: ", e.data()['imagepath']);
+          this.results.push({
+            idpost: e.data()['idpost'],
+            imagepath: e.data()['imagepath'],
+          }); 
+          this.nposts = this.results.length;
+          this.isLoaded2 = true;
+          console.log("Posts from this profile: ", this.results);
+        });
+      }); 
+      */
+     
+
 
 
 
     this.fser.getProfilePictures(this.uid).subscribe(data => {
+      this.results = [];
       data.map(e => {
         this.results.push({
           //idpost: e.payload.doc.id,
@@ -102,6 +126,7 @@ export class ProfileotherPage implements OnInit {
       this.nposts = this.results.length;
       this.isLoaded2 = true;
     });
+  
 
   }
 
@@ -165,6 +190,7 @@ export class ProfileotherPage implements OnInit {
     }, err => {
       console.log("ERRO AO FOLLOW 2!");
     });
+    console.log("Posts: ", this.results);
   }
 
 
@@ -173,11 +199,13 @@ export class ProfileotherPage implements OnInit {
     this.fser.Unfollow1(this.uid, this.userInfo.following).then( res => {
     }, err => {
       console.log("ERRO AO UNFOLLOW 1!");
-    })
+    });
     this.fser.Unfollow2(this.uid, this.userInfo.followers).then( res => {
     }, err => {
       console.log("ERRO AO UNFOLLOW 2!");
     });
+    console.log("Posts: ", this.results);
+    console.log("isLoaded2: ", this.isLoaded2);
   }
 
 

@@ -25,7 +25,7 @@ export class PictureService {
      // Take a photo
       const capturedPhoto = await Camera.getPhoto({
         resultType: CameraResultType.Base64, // file-based data; provides best performance
-        source: CameraSource.Camera, // automatically take a new photo with the camera
+        source: CameraSource.Prompt, // automatically take a new photo with the camera //ou Camera
         allowEditing: false,
         quality: 100 // highest quality (0 to 100)
       });
@@ -48,19 +48,19 @@ export class PictureService {
       return [capturedPhoto.base64String, newfilename]; //base64String
     }
 
-
-
-    
-
-
-
-
-
-
-
-
+  }
 
     
+
+
+
+
+
+
+
+
+
+    /*
     private async savePicture(cameraPhoto: Photo) { 
       // Convert photo to base64 format, required by Filesystem API to save
       const base64Data = await this.readAsBase64(cameraPhoto);
@@ -122,9 +122,10 @@ export class PictureService {
       };
       reader.readAsDataURL(blob);
     });
+    */
 
 
-}
+
 
 
 
