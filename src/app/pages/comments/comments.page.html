@@ -23,28 +23,30 @@
 
 <ion-content *ngIf="isLoaded2">
 
-      <ion-grid class="comment">
-        <ion-row>
-          <ion-col size="2">
-            <ion-avatar>
-              <img src="../assets/images/profilepics/profile1.jpg">
-            </ion-avatar>
-          </ion-col>
-          <ion-col size="10">
-            <p><b>aaron_man: </b> The way you combined the items was really nice. Keep up :) </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="2">
-          </ion-col>
-          <ion-col size="6">
-            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> 13/06/2021 19:34:15 <p>
-          </ion-col>
-          <ion-col size="4">
-            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+  <ion-grid class="comment">
+    <ion-row>
+      <ion-col size="4">
+        <ion-avatar>
+          <img src="../assets/images/profilepics/profile1.jpg">
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="8">
+        <p><b>aaron_man: </b> The way you combined the items was really nice. Keep up :) </p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+      </ion-col>
+      <ion-col size="6">
+        <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> 13/06/2021 19:34:15
+        <p>
+      </ion-col>
+      <ion-col size="4">
+        <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply
+        <p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 
 
@@ -57,58 +59,63 @@
 
 
 
-      <ion-grid class="comment">
-        <ion-row>
-          <ion-col size="2">
-            <ion-avatar>
-              <img src="../assets/images/profilepics/profile2.jpeg">
-            </ion-avatar>
-          </ion-col>
-          <ion-col size="10">
-            <p><b>bellafiori: </b>You are so talented to choose outfits! I was literally asking myself yesterday how to combine colorful items lol</p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="2">
-          </ion-col>
-          <ion-col size="6">
-            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> 11/05/2021 12:00:08 <p>
-          </ion-col>
-          <ion-col size="4">
-            <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+  <ion-grid class="comment">
+    <ion-row>
+      <ion-col size="4">
+        <ion-avatar>
+          <img src="../assets/images/profilepics/profile2.jpeg">
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="8">
+        <p><b>bellafiori: </b>You are so talented to choose outfits! I was literally asking myself yesterday how to
+          combine colorful items lol</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+      </ion-col>
+      <ion-col size="6">
+        <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> 11/05/2021 12:00:08
+        <p>
+      </ion-col>
+      <ion-col size="4">
+        <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply
+        <p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 
 
 
 
 
-      <div *ngFor="let comment of commentList">
-        <ion-grid class="comment">
-          <ion-row>
-            <ion-col size="2">
-              <ion-avatar>
-                  <img src="{{comment.imagepath}}" (click)="GoToProfilePage(comment.uid)">
-              </ion-avatar>
-            </ion-col>
-            <ion-col size="10">
-              <p><b>{{comment.username}}: </b>{{comment.comment}}</p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="2">
-            </ion-col>
-            <ion-col size="6">
-              <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> {{comment.datetime}} <p>
-            </ion-col>
-            <ion-col size="4">
-              <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply <p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
+  <div *ngFor="let comment of commentList">
+    <ion-grid class="comment">
+      <ion-row>
+        <ion-col size="4">
+          <ion-avatar>
+            <img src="{{comment.imagepath}}" (click)="GoToProfilePage(comment.uid)">
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="8">
+          <p><b>{{comment.username}}: </b>{{comment.comment}}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="2">
+        </ion-col>
+        <ion-col size="6">
+          <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#8e8e8e'"> {{comment.datetime}}
+          <p>
+        </ion-col>
+        <ion-col size="4">
+          <p style="float: left; font-size: 14px; font-family: 'Nunito Sans'; color:'#0207b7'"> Reply
+          <p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
 
 
@@ -124,26 +131,23 @@
 <ion-footer *ngIf="isLoaded1">
   <!-- add the input field fixed to the bottom of the screen -->
   <form class="form" [formGroup]="validations_form" (ngSubmit)="SendComment()">
-  <ion-grid>
+    <ion-grid>
       <ion-row class="comment-area">
-        <ion-col size="2">
+        <ion-col size="3">
           <ion-avatar>
             <img src="{{userInfo.profilephoto}}">
           </ion-avatar>
         </ion-col>
-          <ion-col size="8">
-            <!-- <ion-textarea placeholder="Enter your comment..."></ion-textarea> -->
-            <ion-input type="text" formControlName="comment" placeholder="Enter your comment..."></ion-input>
-          </ion-col>
-          <ion-col size="2">
-            <ion-button type="submit" fill="clear" [disabled]="!validations_form.valid">
-              <ion-icon name="paper-plane"></ion-icon>
-            </ion-button>
-          </ion-col>  
+        <ion-col size="7">
+          <!-- <ion-textarea placeholder="Enter your comment..."></ion-textarea> -->
+          <ion-input type="text" formControlName="comment" placeholder="Enter your comment..."></ion-input>
+        </ion-col>
+        <ion-col size="2">
+          <ion-button type="submit" fill="clear" [disabled]="!validations_form.valid">
+            <ion-icon name="paper-plane"></ion-icon>
+          </ion-button>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </form>
 </ion-footer>
-
-
-

@@ -19,29 +19,15 @@ exports.alertFriends = functions
     console.log("UID: ", uid);
     const db = admin.firestore();
 
-    // 1º Buscar a lista dos amigos da pessoa que postou
-    const userDetailsRef = db.collection('userDetails').where("uid", "==", uid);
-    const userDetails = await userDetailsRef.get();
+    // 1º Buscar os seguidores da pessoa que postou 
+    const followersRef = db.collection('userDetails').where("following", "array-contains", uid);
+    const followers = await followersRef.get();
 
-    let followers;
-
-    userDetails.forEach((res) => {
-      followers = res.data()['followers'];
-    });
-
-    console.log("FOLLOWERS: ", followers);
-  
-    // 2º Preciso de ir buscar os pushTokens de cada um dos amigos
-    const tokens: any[] = [];
-
-    const followersTokensRef = db
-      .collection('userDetails')
-      .where('uid', 'in', followers);
-
-    const followersTokens = await followersTokensRef.get();
-
-    followersTokens.forEach((res) => {
-      tokens.push(res.data()['token']);
+    const tokens: string[] = [];
+    
+    followers.forEach((res) => {
+      tokens.push( res.data()['token']);// 2º buscar os tokens de cada seguidor
+      console.log(res.data().username, 'exists!')
     });
 
     console.log('TOKENS ', tokens);
