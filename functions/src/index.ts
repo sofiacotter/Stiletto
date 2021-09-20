@@ -25,9 +25,11 @@ exports.alertFriends = functions
 
     const tokens: string[] = [];
     
-    followers.forEach((res) => {
-      tokens.push( res.data()['token']);// 2º buscar os tokens de cada seguidor
-      console.log(res.data().username, 'exists!')
+    followers.forEach((res:any) => {
+      const token:string =  res.data()['token']
+      if (token.length >0){
+        tokens.push(token)
+      }
     });
 
     console.log('TOKENS ', tokens);

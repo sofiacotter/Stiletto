@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Platform } from '@ionic/angular';
 import { FireService } from './fire.service';
 
 
@@ -12,7 +13,7 @@ export class PictureService {
   public photos: Photo;
 
 
-  constructor(private fser: FireService) {}
+  constructor(private fser: FireService, private platform: Platform) {}
 
 
 
@@ -23,12 +24,14 @@ export class PictureService {
 
   public async TakePhoto() {
      // Take a photo
-      const capturedPhoto = await Camera.getPhoto({
-        resultType: CameraResultType.Base64, // file-based data; provides best performance
-        source: CameraSource.Prompt, // automatically take a new photo with the camera //ou Camera
-        allowEditing: false,
-        quality: 100 // highest quality (0 to 100)
-      });
+     const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: this.platform.is('capacitor')
+        ? CameraSource.Prompt
+        : CameraSource.Camera,
+      allowEditing: false,
+      quality: 100,
+    });
 
       // Save the picture and add it to photo collection
       //const savedImageFile = await this.savePicture(capturedPhoto);
