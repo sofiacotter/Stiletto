@@ -24,7 +24,7 @@ export class NotificationsService {
     const toast = await this.toastController.create({
       header: message.title,
       message: "They said: "+message.body,
-      duration: 10000,
+      duration: 8000,
       color: 'dark',
       position: 'top'
     });
@@ -32,7 +32,7 @@ export class NotificationsService {
   }
 
   public initNotifications() {
-    if (this.platform.is('mobile')) {
+    if (this.platform.is('capacitor')) {
       this.registerPushNotifications();
     }
   }
